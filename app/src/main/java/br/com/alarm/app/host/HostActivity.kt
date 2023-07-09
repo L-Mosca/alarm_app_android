@@ -13,43 +13,10 @@ import dagger.hilt.android.AndroidEntryPoint
 class HostActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHostBinding
-    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityHostBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
-        onInitView()
-    }
-
-    private fun onInitView() {
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostContainer) as NavHostFragment
-
-        navController = navHostFragment.navController
-
-
-        binding.bottomNav.setOnItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.alarm_nav_graph -> {
-                    navController.navigate(R.id.alarm_nav_graph)
-                    true
-                }
-
-                R.id.timer_up_nav_graph -> {
-                    true
-                }
-
-                R.id.timer_down_nav_graph -> {
-                    true
-                }
-
-                R.id.settings_nav_graph -> {
-                    true
-                }
-
-                else -> false
-            }
-        }
+        setContentView(R.layout.activity_host)
+        binding = ActivityHostBinding.bind(findViewById(R.id.navHostContainer))
     }
 }

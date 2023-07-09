@@ -13,4 +13,8 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="SwitchStyle" parent="Widget.MaterialComponents.CompoundButton.Switch">
+        <item name="switchMinWidth">72dp</item> <!-- Defina um valor maior para aumentar o tamanho da chave -->
+    </style>
 </resources>
