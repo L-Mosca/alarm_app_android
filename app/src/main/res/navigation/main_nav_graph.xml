@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav_graph"
-    app:startDestination="@id/alarm_nav_graph">
+    app:startDestination="@id/alarmFragment">
 
-    <include app:graph="@navigation/alarm_nav_graph" />
-    <include app:graph="@navigation/timer_up_nav_graph" />
-    <include app:graph="@navigation/timer_down_nav_graph" />
-    <include app:graph="@navigation/settings_nav_graph" />
 
+    <fragment
+        android:id="@+id/alarmFragment"
+        android:name="br.com.alarm.app.screen.alarm.AlarmFragment"
+        android:label="AlarmFragment"
+        tools:layout="@layout/fragment_alarm" />
 </navigation>

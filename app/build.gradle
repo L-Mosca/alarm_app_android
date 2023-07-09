@@ -4,6 +4,7 @@ plugins {
     id 'androidx.navigation.safeargs.kotlin'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -66,6 +67,8 @@ dependencies {
     // Live Data
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.1"
+
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.0-alpha10'
 }
 
 kapt {

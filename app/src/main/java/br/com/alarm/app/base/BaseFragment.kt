@@ -6,10 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.addCallback
-import androidx.annotation.ColorInt
-import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
@@ -50,16 +47,6 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
 
         initObservers()
         initViews()
-    }
-
-    private fun setStatusBarColor(@ColorRes color: Int) {
-        requireActivity().findViewById<CoordinatorLayout>(R.id.clAppRoot)
-            .setBackgroundColor(requireContext().getColor(color))
-    }
-
-    fun setStatusBarColorFromPalette(@ColorInt colorInt: Int) {
-        requireActivity().findViewById<CoordinatorLayout>(R.id.clAppRoot)
-            .setBackgroundColor(colorInt)
     }
 
     open fun onErrorMessage(it: Any?) {
