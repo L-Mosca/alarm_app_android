@@ -44,9 +44,6 @@ class AlarmAdapter : BaseAdapter<AdapterAlarmItemBinding, AlarmItem>() {
 
             tvHour.text = String.format("%02d:%02d", hour, minute)
 
-            val days = data.weekDays.map { it.weekDay }.toString().replace("[", "").replace("]", "")
-
-            tvWeekDays.text = days
 
             ivOptions.setOnClickListener {
                 onOptionsSelected?.invoke(Unit)
@@ -63,7 +60,7 @@ class AlarmAdapter : BaseAdapter<AdapterAlarmItemBinding, AlarmItem>() {
                 } else {
                     vShadow.isVisible = true
                     swAlarm.trackTintList =
-                        ContextCompat.getColorStateList(root.context, R.color.blue_700)
+                        ContextCompat.getColorStateList(root.context, R.color.blue_600)
                 }
             }
 
@@ -74,7 +71,7 @@ class AlarmAdapter : BaseAdapter<AdapterAlarmItemBinding, AlarmItem>() {
             } else {
                 vShadow.isVisible = true
                 swAlarm.trackTintList =
-                    ContextCompat.getColorStateList(root.context, R.color.blue_700)
+                    ContextCompat.getColorStateList(root.context, R.color.blue_600)
             }
         }
     }

@@ -6,15 +6,23 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class AlarmItem(
     val id: Int,
-    val date: Long,
+    var date: Long,
     var isEnable: Boolean,
-    val weekDays: List<WeekDay>
+    var soundName: String = "",
+    var soundVolume: Int = 0,
+    var snoozeIsEnabled: Boolean = false
 ) : Parcelable
 
 
 @Parcelize
-data class WeekDay(
-    val id: Int,
-    val weekDay: String,
-    var isEnabled: Boolean
+data class WeekDays(
+    var days: List<Day>
 ) : Parcelable
+
+@Parcelize
+data class Day(
+    val id: Int,
+    val dayName: String,
+    var isEnable: Boolean = false
+) : Parcelable
+

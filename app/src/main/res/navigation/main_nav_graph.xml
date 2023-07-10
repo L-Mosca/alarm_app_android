@@ -4,11 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav_graph"
     app:startDestination="@id/alarmFragment">
-
-
+    
     <fragment
         android:id="@+id/alarmFragment"
         android:name="br.com.alarm.app.screen.alarm.AlarmFragment"
         android:label="AlarmFragment"
-        tools:layout="@layout/fragment_alarm" />
+        tools:layout="@layout/fragment_alarm">
+        <action
+            android:id="@+id/action_alarmFragment_to_setAlarmFragment"
+            app:destination="@id/setAlarmFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/setAlarmFragment"
+        android:name="br.com.alarm.app.screen.setalarm.SetAlarmFragment"
+        android:label="SetAlarmFragment" />
 </navigation>

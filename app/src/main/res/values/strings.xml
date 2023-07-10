@@ -7,4 +7,24 @@
     <string name="goal_description">Da meta</string>
     <string name="sleep_goal">Meta de sono</string>
     <string name="goal_down_alert">Esta abaixo da sua meta de sono</string>
+    <string name="goal_down_alert_hour">Esta abaixo da sua meta de sono (&lt; 8hr)</string>
+    <string name="set_alarm">Configurar Alarme</string>
+    <string name="done">salvar</string>
+    <string name="wake_up">Acordar</string>
+    <string name="enable_alarm">Ativar alarme</string>
+    <string name="alarm_sound">Som do alarme</string>
+    <string name="snooze">Soneca</string>
+    <string name="active_alarm">Ativar alarme</string>
+    <string name="active_snooze">Ativar soneca</string>
+    <string name="week_days">Dias da semana</string>
+    <string name="save">salvar</string>
+    <string name="all_week_days">Todos os dias</string>
+    <string name="alarm_save">O alarme disparará em %1$d horas e %2$d minutos</string>
+    <string name="sunday">Domingo</string>
+    <string name="monday">Segunda-Feira</string>
+    <string name="tuesday">Terça-Feira</string>
+    <string name="wednesday">Quarta-Feira</string>
+    <string name="thursday">Quinta-Feira</string>
+    <string name="friday">Sexta-Feira</string>
+    <string name="saturday">Sábado</string>
 </resources>
