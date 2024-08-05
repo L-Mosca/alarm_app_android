@@ -1,9 +1,8 @@
 package br.com.alarm.app.screen.setalarm
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.SeekBar
-import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -46,8 +45,8 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
 
         binding.ivBackArrow.setOnClickListener { findNavController().popBackStack() }
         binding.tvDone.setOnClickListener { viewModel.saveClicked() }
-        binding.includeAlarmSound.tvSoundProgress.text =
-            binding.includeAlarmSound.sbVolume.progress.toString()
+        /*binding.includeAlarmSound.tvSoundProgress.text =
+            binding.includeAlarmSound.sbVolume.progress.toString()*/
         binding.tpHour.setOnTimeChangedListener { _, hourOfDay, minute ->
             setTimeText(hourOfDay, minute)
         }
@@ -56,6 +55,7 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
         setTimeText(binding.tpHour.hour, binding.tpHour.minute)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun initObservers() {
         viewModel.saveSuccess.observe(viewLifecycleOwner) {
             val differenceTime =
@@ -109,7 +109,7 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
 
             includeAlarmSound.apply {
                 vSelectSound.setOnClickListener { }
-                sbVolume.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+                /*sbVolume.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
                     override fun onProgressChanged(
                         seekBar: SeekBar?,
                         progress: Int,
@@ -121,18 +121,18 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
                     override fun onStartTrackingTouch(seekBar: SeekBar?) {}
 
                     override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-                })
+                })*/
             }
 
-            includeSnooze.apply {
-                vSnooze.setOnClickListener {
-                    swEnableSnooze.isChecked = !swEnableSnooze.isChecked
-                    changeSwitchAppearance(swEnableSnooze.isChecked, swEnableSnooze)
-                }
-                swEnableSnooze.setOnCheckedChangeListener { _, isChecked ->
-                    changeSwitchAppearance(isChecked, swEnableSnooze)
-                }
-            }
+            /* includeSnooze.apply {
+                 vSnooze.setOnClickListener {
+                     swEnableSnooze.isChecked = !swEnableSnooze.isChecked
+                     changeSwitchAppearance(swEnableSnooze.isChecked, swEnableSnooze)
+                 }
+                 swEnableSnooze.setOnCheckedChangeListener { _, isChecked ->
+                     changeSwitchAppearance(isChecked, swEnableSnooze)
+                 }
+             }*/
 
             includeWeekDays.vWeekDays.setOnClickListener {
                 val fragment = WeekDaysFragment.newInstance(dayData!!)
@@ -199,6 +199,7 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
         binding.tpHour.apply { hour = 6; minute = 0 }
     }
 
+    @SuppressLint("DefaultLocale")
     private fun setTimeText(hour: Int, minute: Int) {
         val formattedHour = String.format("%02d:%02d", hour, minute)
         binding.tvWakeHour.text = formattedHour

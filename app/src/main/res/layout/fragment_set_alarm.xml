@@ -168,11 +168,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
-                    <include
+                   <!-- <include
                         android:id="@+id/includeSnooze"
                         layout="@layout/include_snooze"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content" />-->
 
                     <include
                         android:id="@+id/includeWeekDays"
