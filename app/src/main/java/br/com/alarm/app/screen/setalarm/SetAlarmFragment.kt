@@ -1,9 +1,5 @@
 package br.com.alarm.app.screen.setalarm
 
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.SeekBar
@@ -19,7 +15,6 @@ import br.com.alarm.app.base.BaseFragment
 import br.com.alarm.app.databinding.FragmentSetAlarmBinding
 import br.com.alarm.app.domain.alarm.Day
 import br.com.alarm.app.domain.alarm.WeekDays
-import br.com.alarm.app.domain.alarmreceiver.AlarmReceiver
 import br.com.alarm.app.screen.setalarm.weekdays.WeekDaysFragment
 import br.com.alarm.app.util.executeDelayed
 import br.com.alarm.app.util.getDifferenceTime
@@ -72,23 +67,8 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
                 Toast.LENGTH_SHORT
             ).show()
 
-            val alarmManager =
-                requireActivity().getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            val alarmIntent = Intent(requireContext(), AlarmReceiver::class.java)
-            val pendingIntent = PendingIntent.getBroadcast(
-                requireContext(),
-                0,
-                alarmIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
             val triggerTime = Calendar.getInstance()
             triggerTime.add(Calendar.SECOND, 10)
-
-            alarmManager.setExact(
-                AlarmManager.RTC_WAKEUP,
-                triggerTime.timeInMillis,
-                pendingIntent
-            )
 
             findNavController().popBackStack()
         }
