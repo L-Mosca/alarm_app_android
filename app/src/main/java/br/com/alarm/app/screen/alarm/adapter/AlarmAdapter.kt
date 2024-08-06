@@ -25,54 +25,41 @@ class AlarmAdapter : BaseAdapter<AdapterAlarmItemBinding, AlarmItem>() {
 
     var onSwitchSelected: ((Unit) -> Unit)? = null
     var onOptionsSelected: ((Unit) -> Unit)? = null
+    var onItemSelected: ((AlarmItem) -> Unit)? = null
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "DefaultLocale")
     override fun onBindViewHolder(
         holder: ViewHolder<AdapterAlarmItemBinding>,
         data: AlarmItem,
         position: Int
     ) {
         holder.binding.apply {
-            val date = Date(data.date)
+            root.setOnClickListener { onItemSelected?.invoke(data) }
+            ivOptions.setOnClickListener { onOptionsSelected?.invoke(Unit) }
 
+            val date = Date(data.date)
             val calendar = Calendar.getInstance()
             calendar.time = date
-
-
             val hour = calendar.get(Calendar.HOUR_OF_DAY) + 1
             val minute = calendar.get(Calendar.MINUTE)
 
             tvHour.text = String.format("%02d:%02d", hour, minute)
 
-
-            ivOptions.setOnClickListener {
-                onOptionsSelected?.invoke(Unit)
-            }
-
             swAlarm.setOnCheckedChangeListener { _, isChecked ->
                 data.isEnable = isChecked
                 onSwitchSelected?.invoke(Unit)
 
-                if (data.isEnable) {
-                    vShadow.isVisible = false
-                    swAlarm.trackTintList =
-                        ContextCompat.getColorStateList(root.context, R.color.pink_500)
-                } else {
-                    vShadow.isVisible = true
-                    swAlarm.trackTintList =
-                        ContextCompat.getColorStateList(root.context, R.color.blue_600)
-                }
+                vShadow.isVisible = !data.isEnable
+
+                val color = if (data.isEnable) R.color.pink_500 else R.color.blue_600
+                swAlarm.trackTintList = ContextCompat.getColorStateList(root.context, color)
             }
 
-            if (data.isEnable) {
-                vShadow.isVisible = false
-                swAlarm.trackTintList =
-                    ContextCompat.getColorStateList(root.context, R.color.pink_500)
-            } else {
-                vShadow.isVisible = true
-                swAlarm.trackTintList =
-                    ContextCompat.getColorStateList(root.context, R.color.blue_600)
-            }
+            vShadow.isVisible = !data.isEnable
+
+            val color = if (data.isEnable) R.color.pink_500 else R.color.blue_600
+            swAlarm.trackTintList = ContextCompat.getColorStateList(root.context, color)
+
         }
     }
 }

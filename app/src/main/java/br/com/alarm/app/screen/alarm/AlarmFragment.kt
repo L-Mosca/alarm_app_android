@@ -18,64 +18,30 @@ class AlarmFragment : BaseFragment<FragmentAlarmBinding>() {
     private val adapter = AlarmAdapter()
 
     override fun initViews() {
+        binding.fabNewAlarm.setOnClickListener { goToAlarmScreen() }
+        setupAdapter()
+    }
 
-        binding.fabNewAlarm.setOnClickListener {
-            val direction = AlarmFragmentDirections.actionAlarmFragmentToSetAlarmFragment()
-            navigate(direction)
-        }
+    override fun initObservers() {
+    }
 
+    private fun setupAdapter() {
         val alarmList: List<AlarmItem> = listOf(
-            AlarmItem(
-                id = 1,
-                date = System.currentTimeMillis(),
-                isEnable = true,
-            ),
-            AlarmItem(
-                id = 2,
-                date = System.currentTimeMillis(),
-                isEnable = false,
-            ),
-            AlarmItem(
-                id = 3,
-                date = System.currentTimeMillis(),
-                isEnable = true,
-            ),
-            AlarmItem(
-                id = 3,
-                date = System.currentTimeMillis(),
-                isEnable = true,
-            ),
-            AlarmItem(
-                id = 3,
-                date = System.currentTimeMillis(),
-                isEnable = true,
-            ),
-            AlarmItem(
-                id = 3,
-                date = System.currentTimeMillis(),
-                isEnable = true,
-            ),
-            AlarmItem(
-                id = 3,
-                date = System.currentTimeMillis(),
-                isEnable = true,
-            ),
+            AlarmItem(id = 1, date = System.currentTimeMillis(), isEnable = true),
+            AlarmItem(id = 2, date = System.currentTimeMillis(), isEnable = false),
         )
 
         adapter.dataList = alarmList
 
-        adapter.onSwitchSelected = {
-
-        }
-
-        adapter.onOptionsSelected = {
-
-        }
+        adapter.onSwitchSelected = { }
+        adapter.onOptionsSelected = { }
+        adapter.onItemSelected = { goToAlarmScreen(it) }
 
         binding.rvAlarms.adapter = adapter
-
     }
 
-    override fun initObservers() {
+    private fun goToAlarmScreen(alarmItem: AlarmItem? = null) {
+        val direction = AlarmFragmentDirections.actionAlarmFragmentToSetAlarmFragment(alarmItem)
+        navigate(direction)
     }
 }

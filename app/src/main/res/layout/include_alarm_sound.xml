@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:id="@+id/clSelectSound"
+    android:layout_height="wrap_content">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvAlarmSound"
@@ -58,35 +59,35 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <androidx.appcompat.widget.AppCompatSeekBar
-        android:id="@+id/sbVolume"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="20dp"
-        android:max="100"
-        android:paddingVertical="5dp"
-        android:progress="50"
-        android:progressTint="@color/pink_500"
-        android:thumbTint="@color/blue_700"
-        app:layout_constraintEnd_toStartOf="@+id/tvSoundProgress"
-        app:layout_constraintStart_toStartOf="@id/tvAlarmSound"
-        app:layout_constraintTop_toBottomOf="@id/tvAlarmSound" />
+    <!-- <androidx.appcompat.widget.AppCompatSeekBar
+         android:id="@+id/sbVolume"
+         android:layout_width="0dp"
+         android:layout_height="wrap_content"
+         android:layout_marginHorizontal="20dp"
+         android:layout_marginTop="10dp"
+         android:layout_marginEnd="20dp"
+         android:max="100"
+         android:paddingVertical="5dp"
+         android:progress="50"
+         android:progressTint="@color/pink_500"
+         android:thumbTint="@color/blue_700"
+         app:layout_constraintEnd_toStartOf="@+id/tvSoundProgress"
+         app:layout_constraintStart_toStartOf="@id/tvAlarmSound"
+         app:layout_constraintTop_toBottomOf="@id/tvAlarmSound" />-->
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvSoundProgress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="30dp"
-        android:textColor="@color/pink_500"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/sbVolume"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/sbVolume"
-        tools:ignore="TextContrastCheck"
-        tools:text="50%" />
+    <!-- <androidx.appcompat.widget.AppCompatTextView
+         android:id="@+id/tvSoundProgress"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginEnd="30dp"
+         android:textColor="@color/pink_500"
+         android:textSize="16sp"
+         android:textStyle="bold"
+         app:layout_constraintBottom_toBottomOf="@id/sbVolume"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintTop_toTopOf="@id/sbVolume"
+         tools:ignore="TextContrastCheck"
+         tools:text="50%" />-->
 
     <View
         android:id="@+id/vSeparator2"
@@ -97,6 +98,6 @@
         android:background="#E6E6E6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sbVolume" />
+        app:layout_constraintTop_toBottomOf="@id/tvAlarmSound" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

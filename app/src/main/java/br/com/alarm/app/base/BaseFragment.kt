@@ -44,7 +44,6 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
             onErrorMessage(it)
         }
 
-
         initObservers()
         initViews()
     }
