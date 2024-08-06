@@ -2,6 +2,7 @@ package br.com.alarm.app.screen.alarm.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -24,7 +25,7 @@ class AlarmAdapter : BaseAdapter<AdapterAlarmItemBinding, AlarmItem>() {
         }
 
     var onSwitchSelected: ((Unit) -> Unit)? = null
-    var onOptionsSelected: ((Unit) -> Unit)? = null
+    var onOptionsSelected: ((View, Int, AlarmItem) -> Unit)? = null
     var onItemSelected: ((AlarmItem) -> Unit)? = null
 
     @SuppressLint("SetTextI18n", "DefaultLocale")
@@ -35,7 +36,7 @@ class AlarmAdapter : BaseAdapter<AdapterAlarmItemBinding, AlarmItem>() {
     ) {
         holder.binding.apply {
             root.setOnClickListener { onItemSelected?.invoke(data) }
-            ivOptions.setOnClickListener { onOptionsSelected?.invoke(Unit) }
+            vOptions.setOnClickListener { onOptionsSelected?.invoke(it, position, data) }
 
             val date = Date(data.date)
             val calendar = Calendar.getInstance()
