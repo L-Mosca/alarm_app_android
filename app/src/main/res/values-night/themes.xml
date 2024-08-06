@@ -12,5 +12,14 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/blue_700</item>
         <!-- Customize your theme here. -->
+
+        <item name="popupMenuStyle">@style/Base.PopMenu</item>
     </style>
+
+    <style name="Base.PopMenu" parent="Widget.Material3.PopupMenu">
+        <item name="android:popupBackground">@drawable/pop_menu_background</item>
+        <item name="android:colorControlNormal">@color/red</item>
+        <item name="colorControlNormal">@color/red</item>
+    </style>
+
 </resources>

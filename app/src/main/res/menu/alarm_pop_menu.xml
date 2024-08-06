@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menuDeleteAlarm"
+        android:icon="@drawable/ic_delete"
+        app:iconTint="@color/red"
+        android:title="@string/delete" />
+    <item
+        android:id="@+id/menuEditAlarm"
+        android:icon="@drawable/ic_edit"
+        app:iconTint="@color/blue_700"
+        android:title="@string/edit" />
+</menu>

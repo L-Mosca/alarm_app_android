@@ -2,6 +2,7 @@ package br.com.alarm.app.screen.alarm
 
 import android.view.LayoutInflater
 import androidx.fragment.app.viewModels
+import br.com.alarm.app.R
 import br.com.alarm.app.base.BaseFragment
 import br.com.alarm.app.databinding.FragmentAlarmBinding
 import br.com.alarm.app.domain.alarm.AlarmItem
@@ -23,6 +24,16 @@ class AlarmFragment : BaseFragment<FragmentAlarmBinding>() {
     }
 
     override fun initObservers() {
+        viewModel.deleteAlarm.observe(viewLifecycleOwner) { position ->
+            val newList = adapter.dataList.toMutableList()
+            newList.removeAt(1)
+            adapter.dataList = newList
+            adapter.notifyItemRemoved(position)
+        }
+
+        viewModel.goToEditScreen.observe(viewLifecycleOwner) { alarm ->
+            goToAlarmScreen(alarm)
+        }
     }
 
     private fun setupAdapter() {
@@ -34,7 +45,13 @@ class AlarmFragment : BaseFragment<FragmentAlarmBinding>() {
         adapter.dataList = alarmList
 
         adapter.onSwitchSelected = { }
-        adapter.onOptionsSelected = { }
+
+        adapter.onOptionsSelected = { view, position, alarm ->
+            showPopMenu(R.menu.alarm_pop_menu, view) {
+                viewModel.handlePopMenuClick(it, position, alarm)
+            }
+        }
+
         adapter.onItemSelected = { goToAlarmScreen(it) }
 
         binding.rvAlarms.adapter = adapter

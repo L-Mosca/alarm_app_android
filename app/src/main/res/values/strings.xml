@@ -27,4 +27,6 @@
     <string name="thursday">Quinta-Feira</string>
     <string name="friday">Sexta-Feira</string>
     <string name="saturday">Sábado</string>
+    <string name="delete">Excluir</string>
+    <string name="edit">Editar</string>
 </resources>

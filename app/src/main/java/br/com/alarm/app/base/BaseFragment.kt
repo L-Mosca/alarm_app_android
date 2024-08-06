@@ -2,11 +2,13 @@ package br.com.alarm.app.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.annotation.StringRes
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
@@ -99,6 +101,18 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
                 .setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.purple_200))
                 .setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
         currentSnackBar?.show()
+    }
+
+    fun showPopMenu(
+        popMenu: Int,
+        anchorView: View,
+        onMenuItemSelected: ((MenuItem) -> Boolean)
+    ) {
+        val popUpMenu = PopupMenu(requireContext(), anchorView)
+        popUpMenu.inflate(popMenu)
+        popUpMenu.setOnMenuItemClickListener { onMenuItemSelected.invoke(it) }
+        popUpMenu.setForceShowIcon(true)
+        popUpMenu.show()
     }
 
     override fun onDestroyView() {
