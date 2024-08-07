@@ -8,4 +8,6 @@ interface RingtoneHelperContract {
     fun buildRingtoneIntent(currentRingtone: Uri?): Intent
 
     fun getRingToneTitle(uri: Uri): String
+
+    fun getDefaultRingtone(): Uri
 }

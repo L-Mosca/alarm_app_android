@@ -6,9 +6,9 @@
     <string name="set_time">Definir tempo</string>
     <string name="goal_description">Da meta</string>
     <string name="sleep_goal">Meta de sono</string>
-    <string name="goal_down_alert">Esta abaixo da sua meta de sono</string>
-    <string name="goal_down_alert_hour">Esta abaixo da sua meta de sono (&lt; 8hr)</string>
-    <string name="set_alarm">Configurar Alarme</string>
+    <string name="goal_down_alert">A baixo da sua meta de sono</string>
+    <string name="goal_down_alert_hour">A baixo da sua meta de sono (&lt; 8hr)</string>
+    <string name="set_alarm">Alarme</string>
     <string name="done">salvar</string>
     <string name="wake_up">Acordar</string>
     <string name="enable_alarm">Ativar alarme</string>
@@ -29,4 +29,5 @@
     <string name="saturday">Sábado</string>
     <string name="delete">Excluir</string>
     <string name="edit">Editar</string>
+    <string name="cancel">Cancelar</string>
 </resources>

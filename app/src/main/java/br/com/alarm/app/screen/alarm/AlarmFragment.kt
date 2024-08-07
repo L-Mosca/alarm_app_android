@@ -5,7 +5,7 @@ import androidx.fragment.app.viewModels
 import br.com.alarm.app.R
 import br.com.alarm.app.base.BaseFragment
 import br.com.alarm.app.databinding.FragmentAlarmBinding
-import br.com.alarm.app.domain.alarm.AlarmItem
+import br.com.alarm.app.domain.models.alarm.AlarmItem
 import br.com.alarm.app.screen.alarm.adapter.AlarmAdapter
 import br.com.alarm.app.util.navigate
 import dagger.hilt.android.AndroidEntryPoint
