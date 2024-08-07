@@ -1,6 +1,7 @@
 package br.com.alarm.app.screen.setalarm
 
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
@@ -119,11 +120,7 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
             // Setup Enable/Disable switch
             includeEnableAlarm.apply {
                 vSetAlarm.setOnClickListener {
-                    swEnableAlarm.isChecked = !swEnableAlarm.isChecked
-                    changeSwitchAppearance(swEnableAlarm.isChecked, swEnableAlarm)
-                }
-                swEnableAlarm.setOnCheckedChangeListener { _, isChecked ->
-                    changeSwitchAppearance(isChecked, swEnableAlarm)
+                    viewModel.updateAlarmStatus(!swEnableAlarm.isChecked)
                 }
             }
 
@@ -214,11 +211,11 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
 
     private fun updateAlarmUi(alarmItem: AlarmItem) {
         // Update alarm hour in time picker and card hour
+        Log.e("test", "ESTA CAINDO TODA HORA AQUI")
         binding.includeSetAlarmHour.apply {
             val (hour, minute) = extractHoursAndMinutesFromTimestamp(alarmItem.date!!)
             tpHour.hour = hour
             tpHour.minute = minute
-
             tvWakeHour.text = formatHour(hour, minute)
         }
 
@@ -226,6 +223,7 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
 
             // Update switch checked status
             includeEnableAlarm.swEnableAlarm.isChecked = alarmItem.isEnable
+            changeSwitchAppearance(alarmItem.isEnable, includeEnableAlarm.swEnableAlarm)
 
             // Update ringtone name
             includeAlarmSound.tvSoundName.text =
@@ -233,7 +231,6 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
 
             // Update week days
             dayData = alarmItem.weekDays
-            viewModel.setSelectedDays(dayData!!.days)
         }
     }
 

@@ -42,7 +42,11 @@ class SetAlarmViewModel @Inject constructor(
             firstAlarmSetup = alarm
             return
         }
-        viewModelScope.launch { alarmItem.postValue(alarmRepository.buildDefaultAlarm()) }
+        viewModelScope.launch {
+            val newData = alarmRepository.buildDefaultAlarm()
+            alarmItem.postValue(newData)
+            allDaysSelected.postValue(R.string.all_week_days)
+        }
     }
 
     fun setSelectedDays(dayList: List<Day>) {
@@ -56,7 +60,9 @@ class SetAlarmViewModel @Inject constructor(
         }
     }
 
-    fun saveClicked() { saveSuccess.postValue(Unit) }
+    fun saveClicked() {
+        saveSuccess.postValue(Unit)
+    }
 
     fun selectRingtone() {
         fetchRingtone.postValue(ringtoneHelper.buildRingtoneIntent(alarmItem.value?.ringtone))
@@ -73,5 +79,9 @@ class SetAlarmViewModel @Inject constructor(
 
     fun updateAlarmTime(hour: Int, minute: Int) {
         alarmItem.postValue(alarmItem.value?.updateAlarmValue(hour, minute))
+    }
+
+    fun updateAlarmStatus(isEnabled: Boolean) {
+        alarmItem.postValue(alarmItem.value?.updateAlarmValue(isEnabled))
     }
 }

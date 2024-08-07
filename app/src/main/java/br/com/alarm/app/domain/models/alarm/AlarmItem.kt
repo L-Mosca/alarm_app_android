@@ -33,6 +33,11 @@ fun AlarmItem.updateAlarmValue(hour: Int, minute: Int): AlarmItem {
     return this
 }
 
+fun AlarmItem.updateAlarmValue(isEnabled: Boolean): AlarmItem {
+    this.isEnable = isEnabled
+    return this
+}
+
 @Parcelize
 data class WeekDays(
     var days: List<Day>
