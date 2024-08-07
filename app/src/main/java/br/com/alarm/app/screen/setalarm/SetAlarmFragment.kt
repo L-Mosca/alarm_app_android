@@ -1,10 +1,8 @@
 package br.com.alarm.app.screen.setalarm
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -16,12 +14,15 @@ import androidx.navigation.fragment.navArgs
 import br.com.alarm.app.R
 import br.com.alarm.app.base.BaseFragment
 import br.com.alarm.app.databinding.FragmentSetAlarmBinding
-import br.com.alarm.app.domain.alarm.AlarmItem
-import br.com.alarm.app.domain.alarm.Day
-import br.com.alarm.app.domain.alarm.WeekDays
+import br.com.alarm.app.domain.models.alarm.AlarmItem
+import br.com.alarm.app.domain.models.alarm.Day
+import br.com.alarm.app.domain.models.alarm.WeekDays
 import br.com.alarm.app.screen.setalarm.weekdays.WeekDaysFragment
 import br.com.alarm.app.util.executeDelayed
+import br.com.alarm.app.util.extractHoursAndMinutesFromTimestamp
+import br.com.alarm.app.util.formatHour
 import br.com.alarm.app.util.getDifferenceTime
+import br.com.alarm.app.util.getRingToneTitle
 import br.com.alarm.app.util.hideKeyboard
 import com.google.android.material.switchmaterial.SwitchMaterial
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,38 +40,137 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
     override fun initViews() {
+        dayData = WeekDays.buildWeekDaysList()
         viewModel.setInitialData(navArgs.alarmItem)
+        setupResultLauncher()
+        uiInitialSetup()
+    }
 
+    /**
+     * UI callbacks setup.
+     */
+    private fun uiInitialSetup() {
+        setupAlarmTitle()
+        setupAlarmHour()
+        setupAlarmSettings()
+        setupBottomButtons()
+
+        binding.includeSetAlarmHour.apply {
+            val hour = tpHour.hour
+            val minute = tpHour.minute
+            binding.includeSetAlarmHour.tvWakeHour.text = formatHour(hour, minute)
+        }
+    }
+
+    /**
+     * It's called when user back from ringtone selector Intent.
+     * Handle selected ringtone and apply result in UI (viewModel.handleRingtoneSelected)
+     */
+    private fun setupResultLauncher() {
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 viewModel.handleRingtoneSelected(result)
             }
-
-        dayData = WeekDays.buildWeekDaysList(requireContext())
-
-        binding.ivBackArrow.setOnClickListener { findNavController().popBackStack() }
-        binding.tvDone.setOnClickListener { viewModel.saveClicked() }
-
-        binding.includeAlarmSound.clSelectSound.setOnClickListener { viewModel.selectRingtone() }
-        setupHour()
-        setupWeekDays()
-        alarmSettingsCallbacks()
-        setTimeText(binding.tpHour.hour, binding.tpHour.minute)
     }
 
-    private fun setupHour() {
-        binding.tpHour.setOnTimeChangedListener { _, hour, minute -> setTimeText(hour, minute) }
-        binding.tpHour.apply { hour = 6; minute = 0 }
+    /**
+     * Setup alarm "AppBar"
+     * includeSetAlarmTitle.
+     *  -> Screen Title {tvSetAlarm}
+     *  -> Return button {ivBackArrow}
+     */
+    private fun setupAlarmTitle() {
+        binding.includeSetAlarmTitle.apply {
+            ivBackArrow.setOnClickListener { findNavController().popBackStack() }
+        }
     }
 
-    @SuppressLint("SetTextI18n")
+    /**
+     * Setup alarm time picker and hour card
+     * includeSetAlarmHour.
+     *  -> Time picker {tpHour}
+     *  -> includeWarning.
+     *      -> Warning message
+     *  -> Time selected {tvWakeHour}
+     */
+    private fun setupAlarmHour() {
+        binding.includeSetAlarmHour.apply {
+            tpHour.apply {
+                setOnTimeChangedListener { _, hour, minute ->
+                    viewModel.updateAlarmTime(hour, minute)
+                    //tvWakeHour.text = formatHour(hour, minute)
+                }
+            }
+        }
+    }
+
+    /**
+     * Setup alarm settings:
+     *
+     * includeSetAlarmSettings.
+     *  -> Enabled {swEnableAlarm} -> Show/Switch if alarm was enabled
+     *  -> Sound {clSelectSound} -> Show/Select alarm ringtone sound
+     *  -> WeekDays {vWeekDays} -> Show/Select alarm week days
+     *  -> WeekDaysFragment {flWeekDays} -> Inflate week days popup layout
+     */
+    private fun setupAlarmSettings() {
+        binding.includeSetAlarmSettings.apply {
+
+            // Setup Enable/Disable switch
+            includeEnableAlarm.apply {
+                vSetAlarm.setOnClickListener {
+                    swEnableAlarm.isChecked = !swEnableAlarm.isChecked
+                    changeSwitchAppearance(swEnableAlarm.isChecked, swEnableAlarm)
+                }
+                swEnableAlarm.setOnCheckedChangeListener { _, isChecked ->
+                    changeSwitchAppearance(isChecked, swEnableAlarm)
+                }
+            }
+
+            // Setup Sound
+            includeAlarmSound.clSelectSound.setOnClickListener { viewModel.selectRingtone() }
+
+            // Setup Week days
+            includeWeekDays.vWeekDays.setOnClickListener {
+                val fragment = WeekDaysFragment.newInstance(dayData!!)
+
+                fragment.listener = object : WeekDaysFragment.Listener {
+                    override fun onClose() {
+                        runCircularRevealAnimation(false)
+                        executeDelayed(500L) { childFragmentManager.commit { remove(fragment) } }
+                    }
+
+                    override fun onSaveClicked(daysList: List<Day>) {
+                        dayData?.days = daysList
+                        viewModel.setSelectedDays(dayData?.days!!)
+                        runCircularRevealAnimation(false)
+                    }
+                }
+
+                childFragmentManager.commit {
+                    replace(binding.flWeekDays.id, fragment)
+                    runOnCommit { runCircularRevealAnimation(true) }
+                }
+            }
+        }
+    }
+
+    /**
+     * Setup bottom buttons
+     * - cancel button {btCancelAlarm} -> Cancel changes and back to previous screen
+     * - save button {btSaveAlarm} -> Save alarm and back to previous screen
+     */
+    private fun setupBottomButtons() {
+        binding.includeSetAlarmButtons.apply {
+            btCancelAlarm.setOnClickListener { findNavController().popBackStack() }
+            btSaveAlarm.setOnClickListener { viewModel.saveClicked() }
+        }
+    }
+
+
     override fun initObservers() {
         viewModel.alarmItem.observe(viewLifecycleOwner) { alarm ->
             updateAlarmUi(alarm)
-        }
-
-        viewModel.ringtoneTitle.observe(viewLifecycleOwner) { title ->
-            binding.includeAlarmSound.tvSoundName.text = title
         }
 
         viewModel.fetchRingtone.observe(viewLifecycleOwner) { intent ->
@@ -78,84 +178,62 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
         }
 
         viewModel.saveSuccess.observe(viewLifecycleOwner) {
-            val differenceTime =
-                Pair(binding.tpHour.hour, binding.tpHour.minute).getDifferenceTime()
+            binding.includeSetAlarmHour.tpHour.apply {
+                val differenceTime = Pair(hour, minute).getDifferenceTime()
 
-            Toast.makeText(
-                requireContext(),
-                getString(R.string.alarm_save, differenceTime.first, differenceTime.second),
-                Toast.LENGTH_SHORT
-            ).show()
+                val toastMessage =
+                    getString(R.string.alarm_save, differenceTime.first, differenceTime.second)
 
-            val triggerTime = Calendar.getInstance()
-            triggerTime.add(Calendar.SECOND, 10)
+                showShortToast(toastMessage)
 
-            findNavController().popBackStack()
-        }
+                val triggerTime = Calendar.getInstance()
+                triggerTime.add(Calendar.SECOND, 10)
 
-        viewModel.noneDaySelected.observe(viewLifecycleOwner) {
-            binding.includeWeekDays.tvWeekDaysSelected.apply {
-                text = ""
-                isVisible = false
+                findNavController().popBackStack()
             }
         }
 
+        viewModel.noneDaySelected.observe(viewLifecycleOwner) {
+            binding.includeSetAlarmSettings.includeWeekDays.tvWeekDaysSelected.isVisible = false
+        }
+
         viewModel.selectedDays.observe(viewLifecycleOwner) { selectedDays ->
-            binding.includeWeekDays.tvWeekDaysSelected.apply {
+            binding.includeSetAlarmSettings.includeWeekDays.tvWeekDaysSelected.apply {
                 text = selectedDays
                 isVisible = true
             }
         }
 
         viewModel.allDaysSelected.observe(viewLifecycleOwner) { stringRes ->
-            binding.includeWeekDays.tvWeekDaysSelected.apply {
+            binding.includeSetAlarmSettings.includeWeekDays.tvWeekDaysSelected.apply {
                 text = getString(stringRes)
                 isVisible = true
             }
         }
     }
 
-    private fun updateAlarmUi(alarmItem: AlarmItem) {}
+    private fun updateAlarmUi(alarmItem: AlarmItem) {
+        // Update alarm hour in time picker and card hour
+        binding.includeSetAlarmHour.apply {
+            val (hour, minute) = extractHoursAndMinutesFromTimestamp(alarmItem.date!!)
+            tpHour.hour = hour
+            tpHour.minute = minute
 
-    private fun alarmSettingsCallbacks() {
-        binding.includeEnableAlarm.apply {
-            vSetAlarm.setOnClickListener {
-                swEnableAlarm.isChecked = !swEnableAlarm.isChecked
-                changeSwitchAppearance(swEnableAlarm.isChecked, swEnableAlarm)
-            }
-            swEnableAlarm.setOnCheckedChangeListener { _, isChecked ->
-                changeSwitchAppearance(isChecked, swEnableAlarm)
-            }
+            tvWakeHour.text = formatHour(hour, minute)
         }
-    }
 
-    private fun setupWeekDays() {
-        binding.includeWeekDays.vWeekDays.setOnClickListener {
-            val fragment = WeekDaysFragment.newInstance(dayData!!)
+        binding.includeSetAlarmSettings.apply {
 
-            fragment.listener = object : WeekDaysFragment.Listener {
-                override fun onClose() {
-                    runCircularRevealAnimation(false)
-                    executeDelayed(500L) {
-                        childFragmentManager.commit {
-                            remove(fragment)
-                        }
-                    }
-                }
+            // Update switch checked status
+            includeEnableAlarm.swEnableAlarm.isChecked = alarmItem.isEnable
 
-                override fun onSaveClicked(daysList: List<Day>) {
-                    dayData?.days = daysList
-                    viewModel.setSelectedDays(dayData?.days!!)
-                    runCircularRevealAnimation(false)
-                }
-            }
+            // Update ringtone name
+            includeAlarmSound.tvSoundName.text =
+                alarmItem.ringtone.getRingToneTitle(requireContext())
 
-            childFragmentManager.commit {
-                replace(binding.flWeekDays.id, fragment)
-                runOnCommit {
-                    runCircularRevealAnimation(true)
-                }
-            }
+            // Update week days
+            dayData = alarmItem.weekDays
+            viewModel.setSelectedDays(dayData!!.days)
         }
     }
 
@@ -177,11 +255,5 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
             requireContext(),
             if (isEnable) R.color.pink_500 else R.color.blue_600
         )
-    }
-
-    @SuppressLint("DefaultLocale")
-    private fun setTimeText(hour: Int, minute: Int) {
-        val formattedHour = String.format("%02d:%02d", hour, minute)
-        binding.tvWakeHour.text = formattedHour
     }
 }

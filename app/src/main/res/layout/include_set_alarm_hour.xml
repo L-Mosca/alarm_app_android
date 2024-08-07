@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TimePicker
+        android:id="@+id/tpHour"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="30dp"
+        android:timePickerMode="spinner"
+        app:layout_constraintBottom_toTopOf="@id/cvWakeUp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/includeWarning"
+        layout="@layout/include_sleep_alert"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@id/cvWakeUp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivSun"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginBottom="-16dp"
+        android:elevation="6dp"
+        android:tint="#FFFFC252"
+        app:layout_constraintBottom_toTopOf="@id/cvWakeUp"
+        app:layout_constraintEnd_toEndOf="@id/cvWakeUp"
+        app:layout_constraintStart_toStartOf="@id/cvWakeUp"
+        app:srcCompat="@drawable/ic_sunny" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvWakeUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/blue_700"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="10dp">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/wake_up"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                tools:ignore="TextContrastCheck" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvWakeHour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                tools:text="04.30" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

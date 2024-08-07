@@ -20,7 +20,7 @@
         android:label="SetAlarmFragment" >
         <argument
             android:name="alarmItem"
-            app:argType="br.com.alarm.app.domain.alarm.AlarmItem"
+            app:argType="br.com.alarm.app.domain.models.alarm.AlarmItem"
             app:nullable="true"
             android:defaultValue="@null" />
     </fragment>

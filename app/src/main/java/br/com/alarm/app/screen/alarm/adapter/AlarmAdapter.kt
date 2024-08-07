@@ -10,7 +10,7 @@ import br.com.alarm.app.R
 import br.com.alarm.app.base.BaseAdapter
 import br.com.alarm.app.base.ViewHolder
 import br.com.alarm.app.databinding.AdapterAlarmItemBinding
-import br.com.alarm.app.domain.alarm.AlarmItem
+import br.com.alarm.app.domain.models.alarm.AlarmItem
 import java.util.Calendar
 import java.util.Date
 
@@ -38,7 +38,7 @@ class AlarmAdapter : BaseAdapter<AdapterAlarmItemBinding, AlarmItem>() {
             root.setOnClickListener { onItemSelected?.invoke(data) }
             vOptions.setOnClickListener { onOptionsSelected?.invoke(it, position, data) }
 
-            val date = Date(data.date)
+            val date = Date(data.date!!)
             val calendar = Calendar.getInstance()
             calendar.time = date
             val hour = calendar.get(Calendar.HOUR_OF_DAY) + 1

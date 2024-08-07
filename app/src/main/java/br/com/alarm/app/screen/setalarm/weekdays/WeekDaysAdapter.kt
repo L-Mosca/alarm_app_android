@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import br.com.alarm.app.base.BaseAdapter
 import br.com.alarm.app.base.ViewHolder
 import br.com.alarm.app.databinding.AdapterWeekDaysBinding
-import br.com.alarm.app.domain.alarm.Day
+import br.com.alarm.app.domain.models.alarm.Day
 
 class WeekDaysAdapter : BaseAdapter<AdapterWeekDaysBinding, Day>() {
     override val bindingInflater: (LayoutInflater, ViewGroup) -> AdapterWeekDaysBinding

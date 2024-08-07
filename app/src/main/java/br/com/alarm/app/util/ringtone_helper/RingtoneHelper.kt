@@ -33,4 +33,8 @@ class RingtoneHelper @Inject constructor(@ApplicationContext private val context
         val title = ringtone.getTitle(context)
         return title
     }
+
+    override fun getDefaultRingtone(): Uri =
+        RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_ALARM)
+
 }

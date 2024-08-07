@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
@@ -14,175 +13,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/ivBackArrow"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/rounded_button"
-                android:src="@drawable/ic_back_arrow"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="ImageContrastCheck" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvSetAlarm"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/set_alarm"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/ivBackArrow"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/ivBackArrow" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvDone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:padding="5dp"
-                android:text="@string/done"
-                android:textColor="@color/pink_500"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/ivBackArrow"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/ivBackArrow"
-                tools:ignore="TextContrastCheck" />
-
-            <TimePicker
-                android:id="@+id/tpHour"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginVertical="30dp"
-                android:timePickerMode="spinner"
-                app:layout_constraintBottom_toTopOf="@id/cvWakeUp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvSetAlarm" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center_horizontal"
+            android:orientation="vertical">
 
             <include
-                android:id="@+id/includeWarning"
-                layout="@layout/include_sleep_alert"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toTopOf="@id/cvWakeUp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:id="@+id/includeSetAlarmTitle"
+                layout="@layout/include_set_alarm_title" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginBottom="-16dp"
-                android:elevation="6dp"
-                android:tint="#FFFFC252"
-                app:layout_constraintBottom_toTopOf="@id/cvWakeUp"
-                app:layout_constraintEnd_toEndOf="@id/cvWakeUp"
-                app:layout_constraintStart_toStartOf="@id/cvWakeUp"
-                app:srcCompat="@drawable/ic_sunny" />
+            <include
+                android:id="@+id/includeSetAlarmHour"
+                layout="@layout/include_set_alarm_hour" />
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cvWakeUp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="5dp"
-                app:layout_constraintBottom_toTopOf="@id/cvAlarmSettings"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+            <include
+                android:id="@+id/includeSetAlarmSettings"
+                layout="@layout/include_set_alarm_settings" />
 
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/blue_700"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:paddingHorizontal="10dp"
-                    android:paddingVertical="10dp">
+            <include android:id="@+id/includeSetAlarmButtons"
+                layout="@layout/include_set_alarm_buttons" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/wake_up"
-                        android:textColor="@color/white"
-                        android:textSize="14sp"
-                        tools:ignore="TextContrastCheck" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvWakeHour"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="30dp"
-                        android:textColor="@color/white"
-                        android:textSize="24sp"
-                        android:textStyle="bold"
-                        tools:text="04.30" />
-
-                </androidx.appcompat.widget.LinearLayoutCompat>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cvAlarmSettings"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="20dp"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="2dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:paddingBottom="10dp">
-
-                    <include
-                        android:id="@+id/includeEnableAlarm"
-                        layout="@layout/include_enable_alarm"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                    <include
-                        android:id="@+id/includeAlarmSound"
-                        layout="@layout/include_alarm_sound"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                   <!-- <include
-                        android:id="@+id/includeSnooze"
-                        layout="@layout/include_snooze"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />-->
-
-                    <include
-                        android:id="@+id/includeWeekDays"
-                        layout="@layout/include_week_days"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                </androidx.appcompat.widget.LinearLayoutCompat>
-            </com.google.android.material.card.MaterialCardView>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.core.widget.NestedScrollView>
 
     <FrameLayout

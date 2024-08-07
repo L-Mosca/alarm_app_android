@@ -4,7 +4,7 @@ import android.view.MenuItem
 import br.com.alarm.app.R
 import br.com.alarm.app.base.BaseViewModel
 import br.com.alarm.app.base.SingleLiveData
-import br.com.alarm.app.domain.alarm.AlarmItem
+import br.com.alarm.app.domain.models.alarm.AlarmItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
