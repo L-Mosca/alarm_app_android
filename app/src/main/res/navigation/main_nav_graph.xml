@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav_graph"
     app:startDestination="@id/alarmFragment">
-    
+
     <fragment
         android:id="@+id/alarmFragment"
         android:name="br.com.alarm.app.screen.alarm.AlarmFragment"
@@ -17,11 +17,10 @@
     <fragment
         android:id="@+id/setAlarmFragment"
         android:name="br.com.alarm.app.screen.setalarm.SetAlarmFragment"
-        android:label="SetAlarmFragment" >
+        android:label="SetAlarmFragment">
         <argument
             android:name="alarmItem"
-            app:argType="br.com.alarm.app.domain.models.alarm.AlarmItem"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            android:defaultValue="-100L"
+            app:argType="long" />
     </fragment>
 </navigation>

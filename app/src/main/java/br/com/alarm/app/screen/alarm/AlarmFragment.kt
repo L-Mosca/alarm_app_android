@@ -1,5 +1,6 @@
 package br.com.alarm.app.screen.alarm
 
+import android.util.Log
 import android.view.LayoutInflater
 import androidx.fragment.app.viewModels
 import br.com.alarm.app.R
@@ -20,15 +21,16 @@ class AlarmFragment : BaseFragment<FragmentAlarmBinding>() {
 
     override fun initViews() {
         binding.fabNewAlarm.setOnClickListener { goToAlarmScreen() }
-        setupAdapter()
     }
 
     override fun initObservers() {
-        viewModel.deleteAlarm.observe(viewLifecycleOwner) { position ->
-            val newList = adapter.dataList.toMutableList()
-            newList.removeAt(1)
-            adapter.dataList = newList
-            adapter.notifyItemRemoved(position)
+        viewModel.alarmList.observe(viewLifecycleOwner) { setupAdapter(it) }
+
+        viewModel.deleteAlarm.observe(viewLifecycleOwner) {
+            val newList = adapter.currentList.toMutableList()
+            newList.removeIf { item -> item.id == it.second.id }
+            adapter.submitList(newList)
+            adapter.notifyItemRemoved(it.first)
         }
 
         viewModel.goToEditScreen.observe(viewLifecycleOwner) { alarm ->
@@ -36,13 +38,8 @@ class AlarmFragment : BaseFragment<FragmentAlarmBinding>() {
         }
     }
 
-    private fun setupAdapter() {
-        val alarmList: List<AlarmItem> = listOf(
-            AlarmItem(id = 1, date = System.currentTimeMillis(), isEnable = true),
-            AlarmItem(id = 2, date = System.currentTimeMillis(), isEnable = false),
-        )
-
-        adapter.dataList = alarmList
+    private fun setupAdapter(list: List<AlarmItem>) {
+        adapter.submitList(list)
 
         adapter.onSwitchSelected = { }
 
@@ -58,7 +55,13 @@ class AlarmFragment : BaseFragment<FragmentAlarmBinding>() {
     }
 
     private fun goToAlarmScreen(alarmItem: AlarmItem? = null) {
-        val direction = AlarmFragmentDirections.actionAlarmFragmentToSetAlarmFragment(alarmItem)
+        val direction =
+            AlarmFragmentDirections.actionAlarmFragmentToSetAlarmFragment(alarmItem?.id ?: -100)
         navigate(direction)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchAlarms()
     }
 }

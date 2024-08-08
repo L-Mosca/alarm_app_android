@@ -2,21 +2,27 @@ package br.com.alarm.app.domain.models.alarm
 
 import android.net.Uri
 import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import br.com.alarm.app.domain.database.Converters
 import br.com.alarm.app.util.updateHoursAndMinutes
 import kotlinx.parcelize.Parcelize
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
-@Parcelize
+@Entity
 data class AlarmItem(
-    val id: Int? = null,
-    var date: Long? = null,
-    var isEnable: Boolean = false,
-    var ringtone: Uri? = null,
-    var snoozeIsEnabled: Boolean = false,
-    var weekDays: WeekDays? = null
-) : Parcelable
+    @PrimaryKey(autoGenerate = true) var id: Long,
+    @ColumnInfo("date") var date: Long = Date().time,
+    @ColumnInfo("is_enable") var isEnable: Boolean = true,
+    @ColumnInfo("snooze_is_enable") var snoozeIsEnabled: Boolean = false,
+    @ColumnInfo("ringtone") @TypeConverters(Converters::class) var ringtone: Uri? = null,
+    @ColumnInfo("week_days") @TypeConverters(Converters::class) var weekDays: WeekDays? = null
+)
 
 fun AlarmItem.updateAlarmValue(ringtone: Uri): AlarmItem {
     this.ringtone = ringtone
@@ -29,7 +35,7 @@ fun AlarmItem.updateAlarmValue(dayList: List<Day>): AlarmItem {
 }
 
 fun AlarmItem.updateAlarmValue(hour: Int, minute: Int): AlarmItem {
-    this.date = this.date?.updateHoursAndMinutes(hour, minute)
+    this.date = this.date.updateHoursAndMinutes(hour, minute)
     return this
 }
 

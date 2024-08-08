@@ -35,17 +35,20 @@ class SetAlarmViewModel @Inject constructor(
     private var firstAlarmSetup: AlarmItem? = null
     private var isNewAlarm = true
 
-    fun setInitialData(alarm: AlarmItem? = null) {
-        alarm?.let {
-            alarmItem.postValue(it)
-            isNewAlarm = false
-            firstAlarmSetup = alarm
-            return
-        }
+    fun setInitialData(alarmId: Long) {
+        // TODO adjust all days selected
+        // TODO create new alarm with this screen
         viewModelScope.launch {
-            val newData = alarmRepository.buildDefaultAlarm()
-            alarmItem.postValue(newData)
-            allDaysSelected.postValue(R.string.all_week_days)
+            if (alarmId == -100L) {
+                val newData = alarmRepository.buildDefaultAlarm()
+                alarmItem.postValue(newData)
+                allDaysSelected.postValue(R.string.all_week_days)
+            } else {
+                val alarmDetail = alarmRepository.fetchAlarmDetail(alarmId)
+                alarmItem.postValue(alarmDetail)
+                isNewAlarm = false
+                firstAlarmSetup = alarmDetail
+            }
         }
     }
 

@@ -1,5 +1,8 @@
 package br.com.alarm.app.di
 
+import android.content.Context
+import br.com.alarm.app.domain.database.AlarmDatabase
+import br.com.alarm.app.domain.database.AlarmDatabaseDAO
 import br.com.alarm.app.domain.repositories.AlarmRepository
 import br.com.alarm.app.domain.repositories.AlarmRepositoryContract
 import br.com.alarm.app.util.ringtone_helper.RingtoneHelper
@@ -7,6 +10,7 @@ import br.com.alarm.app.util.ringtone_helper.RingtoneHelperContract
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import org.intellij.lang.annotations.PrintFormat
 import javax.inject.Singleton
@@ -14,6 +18,16 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object Modules {
+
+    @Provides
+    fun provideDatabase(@ApplicationContext context: Context): AlarmDatabase {
+        return AlarmDatabase.getDatabase(context)
+    }
+
+    @Provides
+    fun provideDatabaseDao(database: AlarmDatabase): AlarmDatabaseDAO {
+        return database.alarmDao()
+    }
 
     @Provides
     @Singleton

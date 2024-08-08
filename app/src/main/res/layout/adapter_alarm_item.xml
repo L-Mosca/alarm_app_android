@@ -53,6 +53,16 @@
                     app:layout_constraintTop_toTopOf="@id/tvHour"
                     app:thumbTint="@color/gray_100"
                     app:trackTint="@color/pink_500" />
+
+
+                <View
+                    android:id="@+id/vSwitch"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="@id/swAlarm"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/swAlarm"
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -102,7 +112,7 @@
             android:id="@+id/vShadow"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="#4099A8FF"
+            android:background="#9999A8FF"
             android:clickable="false"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"

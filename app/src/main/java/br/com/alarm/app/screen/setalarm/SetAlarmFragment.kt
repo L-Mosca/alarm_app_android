@@ -211,9 +211,8 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
 
     private fun updateAlarmUi(alarmItem: AlarmItem) {
         // Update alarm hour in time picker and card hour
-        Log.e("test", "ESTA CAINDO TODA HORA AQUI")
         binding.includeSetAlarmHour.apply {
-            val (hour, minute) = extractHoursAndMinutesFromTimestamp(alarmItem.date!!)
+            val (hour, minute) = extractHoursAndMinutesFromTimestamp(alarmItem.date)
             tpHour.hour = hour
             tpHour.minute = minute
             tvWakeHour.text = formatHour(hour, minute)
