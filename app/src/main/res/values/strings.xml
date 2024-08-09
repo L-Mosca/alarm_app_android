@@ -19,6 +19,7 @@
     <string name="week_days">Dias da semana</string>
     <string name="save">salvar</string>
     <string name="all_week_days">Todos os dias</string>
+    <string name="never">Nunca</string>
     <string name="alarm_save">O alarme disparará em %1$d horas e %2$d minutos</string>
     <string name="sunday">Domingo</string>
     <string name="monday">Segunda-Feira</string>
