@@ -83,9 +83,9 @@ fun WeekDays?.getWeekDays(context: Context): String {
         val days = weekDays.days.filter { it.isEnable }
 
         return when (days.size) {
-            0 -> ""
+            0 -> context.getString(R.string.never)
             7 -> context.getString(R.string.all_week_days)
-            else -> days.map { it.dayName.substring(0, 3) }.removeBrackets()
+            else -> days.map { it.dayName.substring(0, 3) }.removeBrackets().plus(".")
         }
     }
 
