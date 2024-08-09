@@ -16,7 +16,6 @@ class AlarmRepository @Inject constructor(
         val defaultRingtone = ringtoneHelper.getDefaultRingtone()
         val alarm =
             AlarmItem(
-                id = -30,
                 date = getNextSixAM(),
                 isEnable = true,
                 ringtone = defaultRingtone,

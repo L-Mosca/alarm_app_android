@@ -28,12 +28,11 @@
         android:layout_marginTop="5dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintEnd_toStartOf="@id/ivWeekDays"
         app:layout_constraintStart_toStartOf="@id/tvWeekDays"
         app:layout_constraintTop_toBottomOf="@id/tvWeekDays"
-        tools:text="todos os dias da semana"
-        tools:visibility="visible" />
+        tools:text="todos os dias da semana" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/ivWeekDays"

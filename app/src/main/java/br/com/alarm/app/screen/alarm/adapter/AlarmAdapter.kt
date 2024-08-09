@@ -12,6 +12,7 @@ import br.com.alarm.app.base.BaseListAdapter
 import br.com.alarm.app.base.ViewHolder
 import br.com.alarm.app.databinding.AdapterAlarmItemBinding
 import br.com.alarm.app.domain.models.alarm.AlarmItem
+import br.com.alarm.app.domain.models.alarm.getWeekDays
 import br.com.alarm.app.util.extractHoursAndMinutesFromTimestamp
 
 class AlarmAdapter : BaseListAdapter<AdapterAlarmItemBinding, AlarmItem>(DiffUtilCallback) {
@@ -53,6 +54,8 @@ class AlarmAdapter : BaseListAdapter<AdapterAlarmItemBinding, AlarmItem>(DiffUti
             tvHour.text = String.format("%02d:%02d", hour, minute)
 
             swAlarm.isChecked = data.isEnable
+
+            tvWeekDays.text = data.weekDays.getWeekDays(root.context)
 
             vSwitch.setOnClickListener {
                 data.isEnable = !data.isEnable

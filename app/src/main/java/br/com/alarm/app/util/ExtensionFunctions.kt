@@ -19,7 +19,6 @@ fun List<String>.removeBrackets() = this.toString().trim().replace("[", "").repl
 
 fun List<Day>.getResumeWeekDays() = this.filter { it.isEnable }.map { it.dayName.substring(0, 3) }
 
-
 /**
  * Calculate difference between actual time (hour and minute) and time picker time (hour and minute)
  *

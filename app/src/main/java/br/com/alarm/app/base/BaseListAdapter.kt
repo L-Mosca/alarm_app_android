@@ -24,4 +24,12 @@ abstract class BaseListAdapter<VB : ViewBinding, T : Any>(
     }
 
     abstract fun onBindViewHolder(holder: ViewHolder<VB>, data: T, position: Int)
+
+    fun remove(position: Int) {
+        if (currentList.size == 1) {
+            submitList(emptyList())
+            return
+        }
+        submitList(currentList.toMutableList().apply { remove(getItem(position)) })
+    }
 }
