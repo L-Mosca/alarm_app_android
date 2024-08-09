@@ -5,8 +5,8 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import br.com.alarm.app.base.BaseFragment
 import br.com.alarm.app.databinding.FragmentWeekDaysBinding
-import br.com.alarm.app.domain.alarm.Day
-import br.com.alarm.app.domain.alarm.WeekDays
+import br.com.alarm.app.domain.models.alarm.Day
+import br.com.alarm.app.domain.models.alarm.WeekDays
 import dagger.hilt.android.AndroidEntryPoint
 
 @Suppress("DEPRECATION")
@@ -17,9 +17,7 @@ class WeekDaysFragment : BaseFragment<FragmentWeekDaysBinding>() {
         private const val WEEK_DAYS_ARGUMENT = "WeekDaysFragment.WEEK_DAYS_ARGUMENT"
 
         fun newInstance(daysList: WeekDays) = WeekDaysFragment().apply {
-            arguments = bundleOf(
-                WEEK_DAYS_ARGUMENT to daysList
-            )
+            arguments = bundleOf(WEEK_DAYS_ARGUMENT to daysList)
         }
     }
 

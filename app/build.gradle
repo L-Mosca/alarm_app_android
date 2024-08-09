@@ -68,9 +68,20 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.4"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.8.4"
 
-    implementation 'androidx.constraintlayout:constraintlayout:2.2.0-alpha13'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.0-alpha14'
 
     implementation 'androidx.core:core-splashscreen:1.0.1'
+
+    // Room
+    implementation "androidx.room:room-runtime:2.6.1"
+    implementation "androidx.room:room-ktx:2.6.1"
+    //noinspection KaptUsageInsteadOfKsp
+    kapt 'androidx.room:room-compiler:2.6.1'
+    annotationProcessor "androidx.room:room-compiler:2.6.1"
+    testImplementation "androidx.room:room-testing:2.6.1"
+
+    // Gson
+    implementation 'com.google.code.gson:gson:2.11.0'
 }
 
 kapt {

@@ -43,6 +43,19 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="04.30" />
 
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvHourFormat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginBottom="5dp"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/tvHour"
+                    app:layout_constraintStart_toEndOf="@id/tvHour"
+                    tools:text="AM" />
+
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/swAlarm"
                     android:layout_width="wrap_content"
@@ -53,20 +66,30 @@
                     app:layout_constraintTop_toTopOf="@id/tvHour"
                     app:thumbTint="@color/gray_100"
                     app:trackTint="@color/pink_500" />
+
+
+                <View
+                    android:id="@+id/vSwitch"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="@id/swAlarm"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/swAlarm"
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/llBottomInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/blue_500"
-                android:paddingVertical="10dp">
+                android:background="@color/blue_500">
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvWeekDays"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
+                    android:paddingVertical="10dp"
                     android:textColor="@color/gray_600"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -80,21 +103,29 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_marginEnd="30dp"
+                    android:clickable="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/ic_options" />
 
+                <View
+                    android:id="@+id/vOptions"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/ivOptions"
+                    app:layout_constraintTop_toTopOf="parent" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <View
             android:id="@+id/vShadow"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="#4099A8FF"
+            android:background="#9999A8FF"
             android:clickable="false"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
