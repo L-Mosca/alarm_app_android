@@ -1,13 +1,12 @@
 package br.com.alarm.app.screen.setalarm
 
 import android.content.Intent
-import android.util.Log
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -18,10 +17,11 @@ import br.com.alarm.app.databinding.FragmentSetAlarmBinding
 import br.com.alarm.app.domain.models.alarm.AlarmItem
 import br.com.alarm.app.domain.models.alarm.Day
 import br.com.alarm.app.domain.models.alarm.WeekDays
+import br.com.alarm.app.domain.models.alarm.getWeekDays
 import br.com.alarm.app.screen.setalarm.weekdays.WeekDaysFragment
 import br.com.alarm.app.util.executeDelayed
 import br.com.alarm.app.util.extractHoursAndMinutesFromTimestamp
-import br.com.alarm.app.util.formatHour
+import br.com.alarm.app.util.getHourIn24Format
 import br.com.alarm.app.util.getDifferenceTime
 import br.com.alarm.app.util.getRingToneTitle
 import br.com.alarm.app.util.hideKeyboard
@@ -59,7 +59,7 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
         binding.includeSetAlarmHour.apply {
             val hour = tpHour.hour
             val minute = tpHour.minute
-            binding.includeSetAlarmHour.tvWakeHour.text = formatHour(hour, minute)
+            binding.includeSetAlarmHour.tvWakeHour.text = getHourIn24Format(hour, minute)
         }
     }
 
@@ -95,12 +95,11 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
      *  -> Time selected {tvWakeHour}
      */
     private fun setupAlarmHour() {
-        binding.includeSetAlarmHour.apply {
-            tpHour.apply {
-                setOnTimeChangedListener { _, hour, minute ->
-                    viewModel.updateAlarmTime(hour, minute)
-                    //tvWakeHour.text = formatHour(hour, minute)
-                }
+        binding.includeSetAlarmHour.tpHour.apply {
+            setIs24HourView(DateFormat.is24HourFormat(requireContext()))
+
+            setOnTimeChangedListener { _, hour, minute ->
+                viewModel.updateAlarmTime(hour, minute)
             }
         }
     }
@@ -140,6 +139,8 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
                     override fun onSaveClicked(daysList: List<Day>) {
                         dayData?.days = daysList
                         viewModel.setSelectedDays(dayData?.days!!)
+                        includeWeekDays.tvWeekDaysSelected.text =
+                            dayData.getWeekDays(requireContext())
                         runCircularRevealAnimation(false)
                     }
                 }
@@ -189,33 +190,18 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
                 findNavController().popBackStack()
             }
         }
-
-        viewModel.noneDaySelected.observe(viewLifecycleOwner) {
-            binding.includeSetAlarmSettings.includeWeekDays.tvWeekDaysSelected.isVisible = false
-        }
-
-        viewModel.selectedDays.observe(viewLifecycleOwner) { selectedDays ->
-            binding.includeSetAlarmSettings.includeWeekDays.tvWeekDaysSelected.apply {
-                text = selectedDays
-                isVisible = true
-            }
-        }
-
-        viewModel.allDaysSelected.observe(viewLifecycleOwner) { stringRes ->
-            binding.includeSetAlarmSettings.includeWeekDays.tvWeekDaysSelected.apply {
-                text = getString(stringRes)
-                isVisible = true
-            }
-        }
     }
 
+    /**
+     * Update all screen UI when user change any data
+     */
     private fun updateAlarmUi(alarmItem: AlarmItem) {
         // Update alarm hour in time picker and card hour
         binding.includeSetAlarmHour.apply {
             val (hour, minute) = extractHoursAndMinutesFromTimestamp(alarmItem.date)
             tpHour.hour = hour
             tpHour.minute = minute
-            tvWakeHour.text = formatHour(hour, minute)
+            tvWakeHour.text = getHourIn24Format(hour, minute)
         }
 
         binding.includeSetAlarmSettings.apply {
@@ -230,6 +216,8 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
 
             // Update week days
             dayData = alarmItem.weekDays
+
+            includeWeekDays.tvWeekDaysSelected.text = dayData.getWeekDays(requireContext())
         }
     }
 

@@ -27,10 +27,7 @@ class AlarmFragment : BaseFragment<FragmentAlarmBinding>() {
         viewModel.alarmList.observe(viewLifecycleOwner) { setupAdapter(it) }
 
         viewModel.deleteAlarm.observe(viewLifecycleOwner) {
-            val newList = adapter.currentList.toMutableList()
-            newList.removeIf { item -> item.id == it.second.id }
-            adapter.submitList(newList)
-            adapter.notifyItemRemoved(it.first)
+            adapter.remove(it.first)
         }
 
         viewModel.goToEditScreen.observe(viewLifecycleOwner) { alarm ->
