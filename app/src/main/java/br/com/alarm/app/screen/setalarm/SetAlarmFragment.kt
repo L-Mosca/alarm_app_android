@@ -21,7 +21,7 @@ import br.com.alarm.app.domain.models.alarm.getWeekDays
 import br.com.alarm.app.screen.setalarm.weekdays.WeekDaysFragment
 import br.com.alarm.app.util.executeDelayed
 import br.com.alarm.app.util.extractHoursAndMinutesFromTimestamp
-import br.com.alarm.app.util.formatHour
+import br.com.alarm.app.util.getHourIn24Format
 import br.com.alarm.app.util.getDifferenceTime
 import br.com.alarm.app.util.getRingToneTitle
 import br.com.alarm.app.util.hideKeyboard
@@ -59,7 +59,7 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
         binding.includeSetAlarmHour.apply {
             val hour = tpHour.hour
             val minute = tpHour.minute
-            binding.includeSetAlarmHour.tvWakeHour.text = formatHour(hour, minute)
+            binding.includeSetAlarmHour.tvWakeHour.text = getHourIn24Format(hour, minute)
         }
     }
 
@@ -201,7 +201,7 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
             val (hour, minute) = extractHoursAndMinutesFromTimestamp(alarmItem.date)
             tpHour.hour = hour
             tpHour.minute = minute
-            tvWakeHour.text = formatHour(hour, minute)
+            tvWakeHour.text = getHourIn24Format(hour, minute)
         }
 
         binding.includeSetAlarmSettings.apply {

@@ -1,6 +1,7 @@
 package br.com.alarm.app.screen.alarm.adapter
 
 import android.annotation.SuppressLint
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +14,8 @@ import br.com.alarm.app.base.ViewHolder
 import br.com.alarm.app.databinding.AdapterAlarmItemBinding
 import br.com.alarm.app.domain.models.alarm.AlarmItem
 import br.com.alarm.app.domain.models.alarm.getWeekDays
-import br.com.alarm.app.util.extractHoursAndMinutesFromTimestamp
+import br.com.alarm.app.util.get12HourFormatTag
+import br.com.alarm.app.util.getDate
 
 class AlarmAdapter : BaseListAdapter<AdapterAlarmItemBinding, AlarmItem>(DiffUtilCallback) {
     override val bindingInflater: (LayoutInflater, ViewGroup, Boolean) -> AdapterAlarmItemBinding
@@ -39,6 +41,8 @@ class AlarmAdapter : BaseListAdapter<AdapterAlarmItemBinding, AlarmItem>(DiffUti
     var onSwitchSelected: ((Unit) -> Unit)? = null
     var onOptionsSelected: ((View, Int, AlarmItem) -> Unit)? = null
     var onItemSelected: ((AlarmItem) -> Unit)? = null
+    private var is24HourFormat = true
+    private var isFirstTime = true
 
     @SuppressLint("SetTextI18n", "DefaultLocale")
     override fun onBindViewHolder(
@@ -46,12 +50,18 @@ class AlarmAdapter : BaseListAdapter<AdapterAlarmItemBinding, AlarmItem>(DiffUti
         data: AlarmItem,
         position: Int
     ) {
+        if (isFirstTime) {
+            isFirstTime = false
+            is24HourFormat = DateFormat.is24HourFormat(holder.binding.root.context)
+        }
+
         holder.binding.apply {
             root.setOnClickListener { onItemSelected?.invoke(data) }
             vOptions.setOnClickListener { onOptionsSelected?.invoke(it, position, data) }
 
-            val (hour, minute) = extractHoursAndMinutesFromTimestamp(data.date)
-            tvHour.text = String.format("%02d:%02d", hour, minute)
+            tvHour.text = data.date.getDate(is24HourFormat)
+            tvHourFormat.isVisible = !is24HourFormat
+            if (!is24HourFormat) tvHourFormat.text = data.date.get12HourFormatTag()
 
             swAlarm.isChecked = data.isEnable
 
