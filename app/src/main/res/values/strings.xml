@@ -31,4 +31,9 @@
     <string name="delete">Excluir</string>
     <string name="edit">Editar</string>
     <string name="cancel">Cancelar</string>
+    <string name="attention">Atenção</string>
+    <string name="close_warning">Se sair agora, perderá as alterações</string>
+    <string name="close_confirm">Realmente deseja sair?</string>
+    <string name="close">Sair sem salvar</string>
+    <string name="close_save">Salvar e sair</string>
 </resources>

@@ -7,8 +7,10 @@ import androidx.activity.result.ActivityResult
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import br.com.alarm.app.base.BaseViewModel
+import br.com.alarm.app.base.SingleLiveData
 import br.com.alarm.app.domain.models.alarm.AlarmItem
 import br.com.alarm.app.domain.models.alarm.Day
+import br.com.alarm.app.domain.models.alarm.isEquals
 import br.com.alarm.app.domain.models.alarm.updateAlarmValue
 import br.com.alarm.app.domain.repositories.AlarmRepositoryContract
 import br.com.alarm.app.util.ringtone_helper.RingtoneHelperContract
@@ -26,6 +28,7 @@ class SetAlarmViewModel @Inject constructor(
     val saveSuccess = MutableLiveData<Unit>()
     val fetchRingtone = MutableLiveData<Intent>()
     val alarmItem = MutableLiveData<AlarmItem>()
+    val deleteSuccess = SingleLiveData<Unit>()
 
     private var firstAlarmSetup: AlarmItem? = null
     private var isNewAlarm = true
@@ -35,11 +38,12 @@ class SetAlarmViewModel @Inject constructor(
             if (alarmId == -100L) {
                 val newData = alarmRepository.buildDefaultAlarm()
                 alarmItem.postValue(newData)
+                firstAlarmSetup = newData.copy()
             } else {
                 val alarmDetail = alarmRepository.fetchAlarmDetail(alarmId)
-                alarmItem.postValue(alarmDetail)
+                alarmItem.postValue(alarmDetail.copy())
                 isNewAlarm = false
-                firstAlarmSetup = alarmDetail
+                firstAlarmSetup = alarmDetail.copy()
             }
         }
     }
@@ -74,5 +78,20 @@ class SetAlarmViewModel @Inject constructor(
 
     fun updateAlarmStatus(isEnabled: Boolean) {
         alarmItem.postValue(alarmItem.value?.updateAlarmValue(isEnabled))
+    }
+
+    fun deleteAlarm() {
+        viewModelScope.launch {
+            alarmItem.value?.id?.let { alarmRepository.deleteAlarm(it) }
+            deleteSuccess.postValue(Unit)
+        }
+    }
+
+    fun <T> handleBackPressed(onBackPressed: () -> T, showDialog: () -> T): T {
+        val newAlarm = alarmItem.value
+        val oldAlarm = firstAlarmSetup
+
+        return if (newAlarm.isEquals(oldAlarm)) onBackPressed()
+        else showDialog()
     }
 }

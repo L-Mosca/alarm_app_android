@@ -7,6 +7,7 @@ import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -18,11 +19,12 @@ import br.com.alarm.app.domain.models.alarm.AlarmItem
 import br.com.alarm.app.domain.models.alarm.Day
 import br.com.alarm.app.domain.models.alarm.WeekDays
 import br.com.alarm.app.domain.models.alarm.getWeekDays
+import br.com.alarm.app.screen.setalarm.confirm_alarm_dialog.ConfirmAlarmDialog
 import br.com.alarm.app.screen.setalarm.weekdays.WeekDaysFragment
 import br.com.alarm.app.util.executeDelayed
 import br.com.alarm.app.util.extractHoursAndMinutesFromTimestamp
-import br.com.alarm.app.util.getHourIn24Format
 import br.com.alarm.app.util.getDifferenceTime
+import br.com.alarm.app.util.getHourIn24Format
 import br.com.alarm.app.util.getRingToneTitle
 import br.com.alarm.app.util.hideKeyboard
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -41,6 +43,9 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
     override fun initViews() {
+        setBackNavigation {
+            viewModel.handleBackPressed(::defaultBackPressed, ::showConfirmationDialog)
+        }
         dayData = WeekDays.buildWeekDaysList()
         viewModel.setInitialData(navArgs.alarmItem)
         setupResultLauncher()
@@ -82,7 +87,13 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
      */
     private fun setupAlarmTitle() {
         binding.includeSetAlarmTitle.apply {
-            ivBackArrow.setOnClickListener { findNavController().popBackStack() }
+            vBackArrow.setOnClickListener {
+                viewModel.handleBackPressed(
+                    ::defaultBackPressed,
+                    ::showConfirmationDialog
+                )
+            }
+            vDeleteAlarm.setOnClickListener { viewModel.deleteAlarm() }
         }
     }
 
@@ -160,33 +171,27 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
      */
     private fun setupBottomButtons() {
         binding.includeSetAlarmButtons.apply {
-            btCancelAlarm.setOnClickListener { findNavController().popBackStack() }
             btSaveAlarm.setOnClickListener { viewModel.saveClicked() }
         }
     }
 
 
     override fun initObservers() {
-        viewModel.alarmItem.observe(viewLifecycleOwner) { alarm ->
-            updateAlarmUi(alarm)
-        }
+        viewModel.deleteSuccess.observe(viewLifecycleOwner) { findNavController().popBackStack() }
 
-        viewModel.fetchRingtone.observe(viewLifecycleOwner) { intent ->
-            resultLauncher.launch(intent)
-        }
+        viewModel.alarmItem.observe(viewLifecycleOwner) { updateAlarmUi(it) }
+
+        viewModel.fetchRingtone.observe(viewLifecycleOwner) { resultLauncher.launch(it) }
 
         viewModel.saveSuccess.observe(viewLifecycleOwner) {
             binding.includeSetAlarmHour.tpHour.apply {
                 val differenceTime = Pair(hour, minute).getDifferenceTime()
-
                 val toastMessage =
                     getString(R.string.alarm_save, differenceTime.first, differenceTime.second)
 
                 showShortToast(toastMessage)
-
                 val triggerTime = Calendar.getInstance()
                 triggerTime.add(Calendar.SECOND, 10)
-
                 findNavController().popBackStack()
             }
         }
@@ -196,6 +201,12 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
      * Update all screen UI when user change any data
      */
     private fun updateAlarmUi(alarmItem: AlarmItem) {
+        // Update toolbar UI
+        binding.includeSetAlarmTitle.apply {
+            ivDeleteAlarm.isVisible = alarmItem.id != null
+            vDeleteAlarm.isVisible = alarmItem.id != null
+        }
+
         // Update alarm hour in time picker and card hour
         binding.includeSetAlarmHour.apply {
             val (hour, minute) = extractHoursAndMinutesFromTimestamp(alarmItem.date)
@@ -239,5 +250,23 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
             requireContext(),
             if (isEnable) R.color.pink_500 else R.color.blue_600
         )
+    }
+
+    private fun showConfirmationDialog() {
+        val fragment = ConfirmAlarmDialog().apply {
+            onSaveClicked = {
+                dismiss()
+                this@SetAlarmFragment.viewModel.saveClicked()
+            }
+            onCloseClicked = {
+                dismiss()
+                findNavController().popBackStack()
+            }
+        }
+        fragment.show(childFragmentManager, "CONFIRM_DIALOG")
+    }
+
+    private fun defaultBackPressed() {
+        findNavController().popBackStack()
     }
 }

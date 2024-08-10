@@ -6,9 +6,21 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
+    <color name="dialog_shadow">#B2000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#FFFF0000</color>
 
+    <!--Red-->
+    <color name="red_100">#FFFFC1C1</color>
+    <color name="red_200">#FFFF8A8A</color>
+    <color name="red_300">#FFFF5252</color>
+    <color name="red_400">#FFFF2C2C</color>
+    <color name="red_500">#FFFF0000</color>
+    <color name="red_600">#FFE60000</color>
+    <color name="red_700">#FFCC0000</color>
+    <color name="red_800">#FFB30000</color>
+    <color name="red_900">#FF800000</color>
+    
     <color name="gray_100">#FFFFFFFF</color>
     <color name="gray_200">#FFFEFFFF</color>
     <color name="gray_300">#FFFEFEFF</color>
