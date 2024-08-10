@@ -40,4 +40,8 @@ class AlarmRepository @Inject constructor(
     override suspend fun deleteAlarm(id: Long) {
         database.deleteAlarm(id)
     }
+
+    override suspend fun updateAlarm(alarm: AlarmItem) {
+        database.updateAlarm(alarm)
+    }
 }

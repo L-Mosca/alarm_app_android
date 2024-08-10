@@ -1,7 +1,6 @@
 package br.com.alarm.app.screen.alarm
 
 import android.view.MenuItem
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import br.com.alarm.app.R
 import br.com.alarm.app.base.BaseViewModel
@@ -18,8 +17,8 @@ class AlarmViewModel @Inject constructor(private val alarmRepository: AlarmRepos
 
     val goToEditScreen = SingleLiveData<AlarmItem>()
     val deleteAlarm = SingleLiveData<Pair<Int, AlarmItem>>()
-
-    val alarmList = MutableLiveData<List<AlarmItem>>()
+    val alarmList = SingleLiveData<List<AlarmItem>>()
+    val alarmUpdated = SingleLiveData<Pair<AlarmItem, Int>>()
 
     fun fetchAlarms() {
         viewModelScope.launch {
@@ -48,6 +47,13 @@ class AlarmViewModel @Inject constructor(private val alarmRepository: AlarmRepos
         viewModelScope.launch {
             alarmRepository.deleteAlarm(alarm.id!!)
             deleteAlarm.postValue(Pair(position, alarm))
+        }
+    }
+
+    fun changeAlarm(alarm: AlarmItem, position: Int) {
+        viewModelScope.launch {
+            alarmRepository.updateAlarm(alarm)
+            alarmUpdated.postValue(Pair(alarm, position))
         }
     }
 }

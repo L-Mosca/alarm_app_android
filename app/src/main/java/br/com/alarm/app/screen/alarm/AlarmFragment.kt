@@ -1,6 +1,6 @@
 package br.com.alarm.app.screen.alarm
 
-import android.util.Log
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import androidx.fragment.app.viewModels
 import br.com.alarm.app.R
@@ -23,22 +23,27 @@ class AlarmFragment : BaseFragment<FragmentAlarmBinding>() {
         binding.fabNewAlarm.setOnClickListener { goToAlarmScreen() }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun initObservers() {
+        viewModel.alarmUpdated.observe(viewLifecycleOwner) { adapter.notifyItemChanged(it.second) }
+
         viewModel.alarmList.observe(viewLifecycleOwner) { setupAdapter(it) }
 
-        viewModel.deleteAlarm.observe(viewLifecycleOwner) {
-            adapter.remove(it.first)
-        }
+        viewModel.goToEditScreen.observe(viewLifecycleOwner) { goToAlarmScreen(it) }
 
-        viewModel.goToEditScreen.observe(viewLifecycleOwner) { alarm ->
-            goToAlarmScreen(alarm)
+        viewModel.deleteAlarm.observe(viewLifecycleOwner) {
+            val list = adapter.dataList.toMutableList()
+            list.remove(it.second)
+            adapter.dataList = list
+            adapter.notifyDataSetChanged()
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun setupAdapter(list: List<AlarmItem>) {
-        adapter.submitList(list)
+        adapter.dataList = list
 
-        adapter.onSwitchSelected = { }
+        adapter.onSwitchSelected = { alarm, position -> viewModel.changeAlarm(alarm, position) }
 
         adapter.onOptionsSelected = { view, position, alarm ->
             showPopMenu(R.menu.alarm_pop_menu, view) {
@@ -49,6 +54,7 @@ class AlarmFragment : BaseFragment<FragmentAlarmBinding>() {
         adapter.onItemSelected = { goToAlarmScreen(it) }
 
         binding.rvAlarms.adapter = adapter
+        adapter.notifyDataSetChanged()
     }
 
     private fun goToAlarmScreen(alarmItem: AlarmItem? = null) {

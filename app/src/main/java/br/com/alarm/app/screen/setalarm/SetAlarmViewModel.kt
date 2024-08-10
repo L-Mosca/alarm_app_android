@@ -7,6 +7,7 @@ import androidx.activity.result.ActivityResult
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import br.com.alarm.app.base.BaseViewModel
+import br.com.alarm.app.base.SingleLiveData
 import br.com.alarm.app.domain.models.alarm.AlarmItem
 import br.com.alarm.app.domain.models.alarm.Day
 import br.com.alarm.app.domain.models.alarm.updateAlarmValue
@@ -26,6 +27,7 @@ class SetAlarmViewModel @Inject constructor(
     val saveSuccess = MutableLiveData<Unit>()
     val fetchRingtone = MutableLiveData<Intent>()
     val alarmItem = MutableLiveData<AlarmItem>()
+    val deleteSuccess = SingleLiveData<Unit>()
 
     private var firstAlarmSetup: AlarmItem? = null
     private var isNewAlarm = true
@@ -74,5 +76,12 @@ class SetAlarmViewModel @Inject constructor(
 
     fun updateAlarmStatus(isEnabled: Boolean) {
         alarmItem.postValue(alarmItem.value?.updateAlarmValue(isEnabled))
+    }
+
+    fun deleteAlarm() {
+        viewModelScope.launch {
+            alarmItem.value?.id?.let { alarmRepository.deleteAlarm(it) }
+            deleteSuccess.postValue(Unit)
+        }
     }
 }
