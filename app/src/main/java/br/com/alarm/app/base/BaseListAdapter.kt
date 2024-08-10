@@ -1,5 +1,6 @@
 package br.com.alarm.app.base
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -11,6 +12,8 @@ abstract class BaseListAdapter<VB : ViewBinding, T : Any>(
 ) : ListAdapter<T, ViewHolder<VB>>(diffCallback) {
 
     abstract val bindingInflater: (LayoutInflater, ViewGroup, Boolean) -> VB
+
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder<VB> {
         val inflater = LayoutInflater.from(parent.context)
@@ -31,5 +34,10 @@ abstract class BaseListAdapter<VB : ViewBinding, T : Any>(
             return
         }
         submitList(currentList.toMutableList().apply { remove(getItem(position)) })
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun refreshData() {
+        notifyDataSetChanged()
     }
 }

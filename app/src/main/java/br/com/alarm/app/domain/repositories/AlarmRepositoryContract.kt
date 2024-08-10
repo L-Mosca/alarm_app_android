@@ -13,4 +13,6 @@ interface AlarmRepositoryContract {
     suspend fun fetchAlarmList(): List<AlarmItem>
 
     suspend fun deleteAlarm(id: Long)
+
+    suspend fun updateAlarm(alarm: AlarmItem)
 }
