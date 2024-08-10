@@ -158,7 +158,7 @@
         android:layout_marginTop="30dp"
         android:text="@string/alarm"
         android:textColor="@color/gray_600"
-        android:textSize="20sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
