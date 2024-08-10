@@ -3,6 +3,7 @@ package br.com.alarm.app.domain.models.alarm
 import android.content.Context
 import android.net.Uri
 import android.os.Parcelable
+import android.util.Log
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -26,7 +27,32 @@ data class AlarmItem(
     @ColumnInfo("snooze_is_enable") var snoozeIsEnabled: Boolean = false,
     @ColumnInfo("ringtone") @TypeConverters(Converters::class) var ringtone: Uri? = null,
     @ColumnInfo("week_days") @TypeConverters(Converters::class) var weekDays: WeekDays? = null
-)
+) {
+    fun copy(): AlarmItem {
+        return AlarmItem(
+            id = id,
+            date = date,
+            is24HourFormat = is24HourFormat,
+            isEnable = isEnable,
+            snoozeIsEnabled = snoozeIsEnabled,
+            ringtone = ringtone,
+            weekDays = weekDays?.copy()
+        )
+    }
+}
+
+fun AlarmItem?.isEquals(alarm: AlarmItem?): Boolean {
+    if (alarm == null) return true
+
+    val sameId = this?.id == alarm.id
+    val sameDate = this?.date == alarm.date
+    val sameStatus = this?.isEnable == alarm.isEnable
+    val sameSnoozeStatus = this?.snoozeIsEnabled == alarm.snoozeIsEnabled
+    val sameRingtone = this?.ringtone == alarm.ringtone
+    val sameWeekDay = this?.weekDays.isEquals(alarm.weekDays)
+
+    return sameId && sameDate && sameStatus && sameSnoozeStatus && sameRingtone && sameWeekDay
+}
 
 fun AlarmItem.updateAlarmValue(ringtone: Uri): AlarmItem {
     this.ringtone = ringtone
@@ -52,6 +78,16 @@ fun AlarmItem.updateAlarmValue(isEnabled: Boolean): AlarmItem {
 data class WeekDays(
     var days: List<Day>
 ) : Parcelable {
+
+    fun copy(): WeekDays {
+        val list = days.toMutableList()
+        list.forEachIndexed { index, day ->
+            list[index] = day.copy()
+        }
+
+        return WeekDays(days = list)
+    }
+
     companion object {
         fun buildWeekDaysList(): WeekDays {
             val locale = Locale.getDefault()
@@ -78,6 +114,26 @@ data class WeekDays(
     }
 }
 
+fun WeekDays?.isEquals(weekDays: WeekDays?): Boolean {
+    if (weekDays == null) return true
+    val list1 = this?.days ?: emptyList()
+    if (list1.isEmpty()) return true
+    val list2 = weekDays.days
+
+    var isEquals = true
+
+    list1.forEachIndexed { index, day ->
+        Log.e("test", "day1: ${day.isEnable}")
+        Log.e("test", "day2: ${list2[index].isEnable}")
+        Log.e("test", "-----------------------")
+
+        if (day.isEnable != list2[index].isEnable) {
+            isEquals = false
+        }
+    }
+    return isEquals
+}
+
 fun WeekDays?.getWeekDays(context: Context): String {
     this?.let { weekDays ->
         val days = weekDays.days.filter { it.isEnable }
@@ -96,6 +152,11 @@ fun WeekDays?.getWeekDays(context: Context): String {
 data class Day(
     val id: Int,
     val dayName: String,
-    var isEnable: Boolean = false
-) : Parcelable
+    var isEnable: Boolean = true
+) : Parcelable {
+
+    fun copy(): Day {
+        return Day(id = id, dayName = dayName, isEnable = isEnable)
+    }
+}
 

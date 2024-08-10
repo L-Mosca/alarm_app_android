@@ -19,6 +19,7 @@ import br.com.alarm.app.domain.models.alarm.AlarmItem
 import br.com.alarm.app.domain.models.alarm.Day
 import br.com.alarm.app.domain.models.alarm.WeekDays
 import br.com.alarm.app.domain.models.alarm.getWeekDays
+import br.com.alarm.app.screen.setalarm.confirm_alarm_dialog.ConfirmAlarmDialog
 import br.com.alarm.app.screen.setalarm.weekdays.WeekDaysFragment
 import br.com.alarm.app.util.executeDelayed
 import br.com.alarm.app.util.extractHoursAndMinutesFromTimestamp
@@ -42,6 +43,9 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
     override fun initViews() {
+        setBackNavigation {
+            viewModel.handleBackPressed(::defaultBackPressed, ::showConfirmationDialog)
+        }
         dayData = WeekDays.buildWeekDaysList()
         viewModel.setInitialData(navArgs.alarmItem)
         setupResultLauncher()
@@ -83,7 +87,12 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
      */
     private fun setupAlarmTitle() {
         binding.includeSetAlarmTitle.apply {
-            vBackArrow.setOnClickListener { findNavController().popBackStack() }
+            vBackArrow.setOnClickListener {
+                viewModel.handleBackPressed(
+                    ::defaultBackPressed,
+                    ::showConfirmationDialog
+                )
+            }
             vDeleteAlarm.setOnClickListener { viewModel.deleteAlarm() }
         }
     }
@@ -241,5 +250,23 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
             requireContext(),
             if (isEnable) R.color.pink_500 else R.color.blue_600
         )
+    }
+
+    private fun showConfirmationDialog() {
+        val fragment = ConfirmAlarmDialog().apply {
+            onSaveClicked = {
+                dismiss()
+                this@SetAlarmFragment.viewModel.saveClicked()
+            }
+            onCloseClicked = {
+                dismiss()
+                findNavController().popBackStack()
+            }
+        }
+        fragment.show(childFragmentManager, "CONFIRM_DIALOG")
+    }
+
+    private fun defaultBackPressed() {
+        findNavController().popBackStack()
     }
 }
