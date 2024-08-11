@@ -11,6 +11,7 @@ import br.com.alarm.app.screen.alarm.adapter.AlarmAdapter
 import br.com.alarm.app.util.navigate
 import dagger.hilt.android.AndroidEntryPoint
 
+@SuppressLint("NotifyDataSetChanged")
 @AndroidEntryPoint
 class AlarmFragment : BaseFragment<FragmentAlarmBinding>() {
     override val bindingInflater: (LayoutInflater) -> FragmentAlarmBinding =
@@ -23,7 +24,6 @@ class AlarmFragment : BaseFragment<FragmentAlarmBinding>() {
         binding.fabNewAlarm.setOnClickListener { goToAlarmScreen() }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     override fun initObservers() {
         viewModel.alarmUpdated.observe(viewLifecycleOwner) { adapter.notifyItemChanged(it.second) }
 
@@ -39,7 +39,6 @@ class AlarmFragment : BaseFragment<FragmentAlarmBinding>() {
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun setupAdapter(list: List<AlarmItem>) {
         adapter.dataList = list
 
