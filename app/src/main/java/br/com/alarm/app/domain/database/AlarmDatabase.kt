@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import br.com.alarm.app.domain.models.alarm.AlarmItem
 
-@Database(entities = [AlarmItem::class], version = 1)
+@Database(entities = [AlarmItem::class], version = 2)
 @TypeConverters(Converters::class)
 abstract class AlarmDatabase : RoomDatabase() {
 
