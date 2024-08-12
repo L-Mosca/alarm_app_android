@@ -68,7 +68,7 @@ class SetAlarmViewModel @Inject constructor(
         val selectedToneUri =
             intent?.getParcelableExtra<Uri>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
         if (selectedToneUri != null) {
-            alarmItem.postValue(alarmItem.value?.updateAlarmValue(selectedToneUri))
+            alarmItem.postValue(alarmItem.value?.updateAlarmValue(selectedToneUri.toString()))
         }
     }
 

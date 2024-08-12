@@ -47,5 +47,7 @@ class HostActivity : AppCompatActivity() {
         viewModel.createNotification.observe(this) {
             notificationService.showNotification(it)
         }
+
+        viewModel.scheduleAlarm.observe(this) { notificationService.scheduleAlarm(it) }
     }
 }

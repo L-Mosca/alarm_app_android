@@ -10,9 +10,15 @@ import javax.inject.Inject
 class HostViewModel @Inject constructor() : ViewModel() {
 
     val createNotification = SingleLiveData<AlarmItem>()
+    val scheduleAlarm = SingleLiveData<AlarmItem>()
+
 
     fun createNotification(alarm: AlarmItem) {
         createNotification.postValue(alarm)
+    }
+
+    fun scheduleAlarm(alarm: AlarmItem) {
+        scheduleAlarm.postValue(alarm)
     }
 
 }

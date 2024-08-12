@@ -17,7 +17,7 @@ fun List<String>.removeBrackets() = this.toString().trim().replace("[", "").repl
 
 fun List<Day>.getResumeWeekDays() = this.filter { it.isEnable }.map { it.dayName.substring(0, 3) }
 
-fun Uri?.getRingToneTitle(context: Context): String {
-    val ringtone = RingtoneManager.getRingtone(context, this)
+fun String?.getRingToneTitle(context: Context): String {
+    val ringtone = RingtoneManager.getRingtone(context, Uri.parse(this))
     return ringtone.getTitle(context)
 }
