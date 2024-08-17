@@ -13,17 +13,14 @@ import br.com.alarm.app.domain.models.alarm.Day
 import br.com.alarm.app.domain.models.alarm.isEquals
 import br.com.alarm.app.domain.models.alarm.updateAlarmValue
 import br.com.alarm.app.domain.repositories.AlarmRepositoryContract
-import br.com.alarm.app.util.ringtone_helper.RingtoneHelperContract
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @Suppress("DEPRECATION")
 @HiltViewModel
-class SetAlarmViewModel @Inject constructor(
-    private val ringtoneHelper: RingtoneHelperContract,
-    private val alarmRepository: AlarmRepositoryContract,
-) : BaseViewModel() {
+class SetAlarmViewModel @Inject constructor(private val alarmRepository: AlarmRepositoryContract) :
+    BaseViewModel() {
 
     val saveSuccess = MutableLiveData<Unit>()
     val fetchRingtone = MutableLiveData<Intent>()
@@ -60,7 +57,9 @@ class SetAlarmViewModel @Inject constructor(
     }
 
     fun selectRingtone() {
-        fetchRingtone.postValue(ringtoneHelper.buildRingtoneIntent(alarmItem.value?.ringtone))
+        viewModelScope.launch {
+            fetchRingtone.postValue(alarmRepository.buildRingtoneIntent(alarmItem.value?.ringtone))
+        }
     }
 
     fun handleRingtoneSelected(result: ActivityResult) {
