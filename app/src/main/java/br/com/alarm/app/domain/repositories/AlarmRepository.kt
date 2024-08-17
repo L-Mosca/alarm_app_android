@@ -1,5 +1,6 @@
 package br.com.alarm.app.domain.repositories
 
+import android.content.Intent
 import br.com.alarm.app.domain.database.AlarmDatabaseDAO
 import br.com.alarm.app.domain.models.alarm.AlarmItem
 import br.com.alarm.app.domain.models.alarm.WeekDays
@@ -43,5 +44,9 @@ class AlarmRepository @Inject constructor(
 
     override suspend fun updateAlarm(alarm: AlarmItem) {
         database.updateAlarm(alarm)
+    }
+
+    override suspend fun buildRingtoneIntent(currentRingtone: String?): Intent {
+        return ringtoneHelper.buildRingtoneIntent(currentRingtone)
     }
 }

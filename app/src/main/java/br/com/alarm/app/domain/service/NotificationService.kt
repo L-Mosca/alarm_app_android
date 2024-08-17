@@ -1,5 +1,6 @@
 package br.com.alarm.app.domain.service
 
+import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -13,6 +14,10 @@ import br.com.alarm.app.R
 import br.com.alarm.app.domain.models.alarm.AlarmItem
 import br.com.alarm.app.host.HostActivity
 import br.com.alarm.app.util.getDate
+import com.google.gson.Gson
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 
@@ -87,6 +92,32 @@ class NotificationService @Inject constructor(private val context: Context) {
         notificationLayout.setTextViewText(R.id.tvHourNotification, notificationMessage)
 
         return notificationLayout
+    }
+
+    fun scheduleAlarm(alarm: AlarmItem) {
+        val intent = Intent(context, NotificationReceiver::class.java)
+        val data = Gson().toJson(alarm)
+        intent.putExtra(NOTIFICATION_EXTRA, data)
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            123,
+            intent,
+            PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val time = getTime()
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            time,
+            pendingIntent
+        )
+    }
+
+    private fun getTime(): Long {
+        val localDateTime = LocalDateTime.now().plus(3, ChronoUnit.SECONDS)
+        return localDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
     }
 
 }
