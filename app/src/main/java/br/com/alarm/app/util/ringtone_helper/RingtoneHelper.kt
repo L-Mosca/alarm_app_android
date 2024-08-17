@@ -11,11 +11,11 @@ import javax.inject.Inject
 class RingtoneHelper @Inject constructor(@ApplicationContext private val context: Context) :
     RingtoneHelperContract {
 
-    override fun buildRingtoneIntent(currentRingtone: Uri?): Intent {
+    override fun buildRingtoneIntent(currentRingtone: String?): Intent {
         val ringtone = currentRingtone ?: RingtoneManager.getActualDefaultRingtoneUri(
             context,
             RingtoneManager.TYPE_ALARM
-        )
+        ).toString()
 
         val screenTitle = context.getString(R.string.alarm_sound)
 
@@ -28,13 +28,13 @@ class RingtoneHelper @Inject constructor(@ApplicationContext private val context
         return intent
     }
 
-    override fun getRingToneTitle(uri: Uri): String {
-        val ringtone = RingtoneManager.getRingtone(context, uri)
+    override fun getRingToneTitle(uri: String): String {
+        val ringtone = RingtoneManager.getRingtone(context, Uri.parse(uri))
         val title = ringtone.getTitle(context)
         return title
     }
 
-    override fun getDefaultRingtone(): Uri =
-        RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_ALARM)
+    override fun getDefaultRingtone(): String =
+        RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_ALARM).toString()
 
 }

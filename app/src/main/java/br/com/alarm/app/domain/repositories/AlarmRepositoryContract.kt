@@ -1,5 +1,6 @@
 package br.com.alarm.app.domain.repositories
 
+import android.content.Intent
 import br.com.alarm.app.domain.models.alarm.AlarmItem
 
 interface AlarmRepositoryContract {
@@ -15,4 +16,6 @@ interface AlarmRepositoryContract {
     suspend fun deleteAlarm(id: Long)
 
     suspend fun updateAlarm(alarm: AlarmItem)
+
+    suspend fun buildRingtoneIntent(currentRingtone: String?): Intent
 }

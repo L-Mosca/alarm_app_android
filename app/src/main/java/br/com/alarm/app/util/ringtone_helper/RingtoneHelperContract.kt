@@ -1,14 +1,12 @@
 package br.com.alarm.app.util.ringtone_helper
 
 import android.content.Intent
-import android.net.Uri
-import br.com.alarm.app.domain.models.alarm.AlarmItem
 
 interface RingtoneHelperContract {
 
-    fun buildRingtoneIntent(currentRingtone: Uri?): Intent
+    fun buildRingtoneIntent(currentRingtone: String?): Intent
 
-    fun getRingToneTitle(uri: Uri): String
+    fun getRingToneTitle(uri: String): String
 
-    fun getDefaultRingtone(): Uri
+    fun getDefaultRingtone(): String
 }

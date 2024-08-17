@@ -25,7 +25,7 @@ data class AlarmItem(
     @ColumnInfo("is_24_format") var is24HourFormat: Boolean = true,
     @ColumnInfo("is_enable") var isEnable: Boolean = true,
     @ColumnInfo("snooze_is_enable") var snoozeIsEnabled: Boolean = false,
-    @ColumnInfo("ringtone") @TypeConverters(Converters::class) var ringtone: Uri? = null,
+    @ColumnInfo("ringtone") @TypeConverters(Converters::class) var ringtone: String = "",
     @ColumnInfo("week_days") @TypeConverters(Converters::class) var weekDays: WeekDays? = null
 ) {
     fun copy(): AlarmItem {
@@ -54,7 +54,7 @@ fun AlarmItem?.isEquals(alarm: AlarmItem?): Boolean {
     return sameId && sameDate && sameStatus && sameSnoozeStatus && sameRingtone && sameWeekDay
 }
 
-fun AlarmItem.updateAlarmValue(ringtone: Uri): AlarmItem {
+fun AlarmItem.updateAlarmValue(ringtone: String): AlarmItem {
     this.ringtone = ringtone
     return this
 }
