@@ -17,9 +17,6 @@ import br.com.alarm.app.domain.service.receiver.NotificationReceiver
 import br.com.alarm.app.host.HostActivity
 import br.com.alarm.app.util.getDate
 import com.google.gson.Gson
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 
@@ -39,6 +36,10 @@ class NotificationService @Inject constructor(private val context: Context) {
             val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
                 description = descriptionText
                 setSound(null, null)
+                vibrationPattern = longArrayOf(0, 500, 500, 500)
+                enableVibration(true)
+                lightColor = Color.parseColor("#6F85FF")
+                enableLights(true)
             }
             val notificationManager: NotificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -53,7 +54,11 @@ class NotificationService @Inject constructor(private val context: Context) {
             .setSmallIcon(R.drawable.img_icon_splash)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(buildPendingIntent(alarm))
-            .addAction(R.drawable.ic_alarm, context.getString(R.string.stop), actionPendingIntent(alarm))
+            .addAction(
+                R.drawable.ic_alarm,
+                context.getString(R.string.stop),
+                actionPendingIntent(alarm)
+            )
             .setStyle(NotificationCompat.DecoratedCustomViewStyle())
             .setCustomContentView(buildCustomLayout(alarm))
             .setLights(color, 500, 500)
@@ -74,7 +79,7 @@ class NotificationService @Inject constructor(private val context: Context) {
         intent.action = NOTIFICATION_ACTION_STOP
         return PendingIntent.getActivity(
             context,
-            1,
+            alarm.id?.toInt() ?: NOTIFICATION_DEFAULT_ID.toInt(),
             intent,
             PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
@@ -86,7 +91,7 @@ class NotificationService @Inject constructor(private val context: Context) {
         buttonIntent.action = NOTIFICATION_ACTION_STOP
         return PendingIntent.getBroadcast(
             context,
-            2,
+            alarm.id?.toInt() ?: NOTIFICATION_DEFAULT_ID.toInt(),
             buttonIntent,
             PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
@@ -110,13 +115,15 @@ class NotificationService @Inject constructor(private val context: Context) {
 
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            123,
+            alarm.id?.toInt() ?: NOTIFICATION_DEFAULT_ID.toInt(),
             intent,
             PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val time = getTime()
+        val time = alarm.date
+        //val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+        //val formattedDate = dateFormat.format(time)
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
             time,
@@ -124,8 +131,18 @@ class NotificationService @Inject constructor(private val context: Context) {
         )
     }
 
-    private fun getTime(): Long {
-        val localDateTime = LocalDateTime.now().plus(3, ChronoUnit.SECONDS)
-        return localDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+    fun cancelAlarm(alarm: AlarmItem) {
+        val intent = Intent(context, NotificationReceiver::class.java)
+        intent.action = NOTIFICATION_ACTION_PLAY
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            alarm.id?.toInt() ?: NOTIFICATION_DEFAULT_ID.toInt(),
+            intent,
+            PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager.cancel(pendingIntent)
     }
 }

@@ -13,6 +13,7 @@ import br.com.alarm.app.domain.models.alarm.Day
 import br.com.alarm.app.domain.models.alarm.isEquals
 import br.com.alarm.app.domain.models.alarm.updateAlarmValue
 import br.com.alarm.app.domain.repositories.AlarmRepositoryContract
+import br.com.alarm.app.domain.service.notification.NotificationService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,7 +23,7 @@ import javax.inject.Inject
 class SetAlarmViewModel @Inject constructor(private val alarmRepository: AlarmRepositoryContract) :
     BaseViewModel() {
 
-    val saveSuccess = MutableLiveData<Unit>()
+    val saveSuccess = MutableLiveData<AlarmItem>()
     val fetchRingtone = MutableLiveData<Intent>()
     val alarmItem = MutableLiveData<AlarmItem>()
     val deleteSuccess = SingleLiveData<Unit>()
@@ -32,7 +33,7 @@ class SetAlarmViewModel @Inject constructor(private val alarmRepository: AlarmRe
 
     fun setInitialData(alarmId: Long) {
         viewModelScope.launch {
-            if (alarmId == -100L) {
+            if (alarmId == NotificationService.NOTIFICATION_DEFAULT_ID) {
                 val newData = alarmRepository.buildDefaultAlarm()
                 alarmItem.postValue(newData)
                 firstAlarmSetup = newData.copy()
@@ -52,7 +53,7 @@ class SetAlarmViewModel @Inject constructor(private val alarmRepository: AlarmRe
     fun saveClicked() {
         viewModelScope.launch {
             alarmRepository.createAlarm(alarmItem.value!!)
-            saveSuccess.postValue(Unit)
+            saveSuccess.postValue(alarmItem.value)
         }
     }
 
