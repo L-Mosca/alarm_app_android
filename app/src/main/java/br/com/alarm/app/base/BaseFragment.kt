@@ -26,6 +26,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
     private var currentToast: Toast? = null
     private var currentSnackBar: Snackbar? = null
 
+    abstract val screenName: String
     abstract val viewModel: BaseViewModel
     abstract fun initViews()
     abstract fun initObservers()
@@ -118,6 +119,11 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
     override fun onDestroyView() {
         viewBinding = null
         super.onDestroyView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.setScreenTrack(screenName)
     }
 
 }

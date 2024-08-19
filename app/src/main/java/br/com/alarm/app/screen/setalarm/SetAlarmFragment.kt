@@ -33,15 +33,15 @@ import com.google.android.material.switchmaterial.SwitchMaterial
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 
-
 @AndroidEntryPoint
 class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
+
     override val bindingInflater: (LayoutInflater) -> FragmentSetAlarmBinding =
         FragmentSetAlarmBinding::inflate
     override val viewModel: SetAlarmViewModel by viewModels()
+    override val screenName = "Create Alarm"
 
     private val mainViewModel: HostViewModel by activityViewModels()
-
     private val navArgs: SetAlarmFragmentArgs by navArgs()
     private var dayData: WeekDays? = null
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>

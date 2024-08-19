@@ -1,4 +1,4 @@
-package br.com.alarm.app.domain.repositories
+package br.com.alarm.app.domain.repositories.alarm_repository
 
 import android.content.Intent
 import br.com.alarm.app.domain.database.AlarmDatabaseDAO

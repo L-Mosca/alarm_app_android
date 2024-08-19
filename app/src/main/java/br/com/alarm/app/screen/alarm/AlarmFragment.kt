@@ -15,12 +15,13 @@ import dagger.hilt.android.AndroidEntryPoint
 @SuppressLint("NotifyDataSetChanged")
 @AndroidEntryPoint
 class AlarmFragment : BaseFragment<FragmentAlarmBinding>() {
+
     override val bindingInflater: (LayoutInflater) -> FragmentAlarmBinding =
         FragmentAlarmBinding::inflate
     override val viewModel: AlarmViewModel by viewModels()
+    override val screenName = "Alarm Screen"
 
     private val adapter = AlarmAdapter()
-
 
     override fun initViews() {
         binding.fabNewAlarm.setOnClickListener { goToAlarmScreen() }
@@ -45,7 +46,6 @@ class AlarmFragment : BaseFragment<FragmentAlarmBinding>() {
         adapter.dataList = list
 
         adapter.onSwitchSelected = { alarm, position -> viewModel.changeAlarm(alarm, position) }
-
         adapter.onOptionsSelected = { view, position, alarm ->
             showPopMenu(R.menu.alarm_pop_menu, view) {
                 viewModel.handlePopMenuClick(it, position, alarm)
