@@ -1,5 +1,6 @@
 package br.com.alarm.app.host
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
@@ -7,9 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import br.com.alarm.app.R
 import br.com.alarm.app.databinding.ActivityHostBinding
-import br.com.alarm.app.domain.service.NotificationService
-import br.com.alarm.app.domain.service.NotificationService.Companion.NOTIFICATION_DEFAULT_ID
-import br.com.alarm.app.domain.service.NotificationService.Companion.NOTIFICATION_EXTRA
+import br.com.alarm.app.domain.service.notification.NotificationService
+import br.com.alarm.app.domain.service.notification.NotificationService.Companion.NOTIFICATION_DEFAULT_ID
+import br.com.alarm.app.domain.service.notification.NotificationService.Companion.NOTIFICATION_EXTRA
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,19 +29,12 @@ class HostActivity : AppCompatActivity() {
         notificationService = NotificationService(this)
 
         initObservers()
+        handleIntentData(intent)
+    }
 
-
-        if (intent.hasExtra(NOTIFICATION_EXTRA)) {
-            Log.e(
-                "test",
-                "DADOS RECEBIDOS: ${
-                    intent?.getLongExtra(
-                        NOTIFICATION_EXTRA,
-                        NOTIFICATION_DEFAULT_ID
-                    )
-                }"
-            )
-        }
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        handleIntentData(intent)
     }
 
     private fun initObservers() {
@@ -49,5 +43,9 @@ class HostActivity : AppCompatActivity() {
         }
 
         viewModel.scheduleAlarm.observe(this) { notificationService.scheduleAlarm(it) }
+    }
+
+    private fun handleIntentData(intent: Intent?) {
+        viewModel.handleIntentData(intent)
     }
 }

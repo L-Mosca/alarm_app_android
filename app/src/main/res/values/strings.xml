@@ -36,8 +36,8 @@
     <string name="close_confirm">Realmente deseja sair?</string>
     <string name="close">Sair sem salvar</string>
     <string name="close_save">Salvar e sair</string>
-    <string name="channel_name">NOTIFICATION_CHANNEL_NAME</string>
-    <string name="channel_description">NOTIFICATION_CHANNEL_DESCRIPTION</string>
+    <string name="channel_name">Alarme</string>
+    <string name="channel_description">Canal de notificações do app</string>
     <string name="stop">Pare</string>
     <string name="notification_hour">Já são %s horas</string>
 </resources>

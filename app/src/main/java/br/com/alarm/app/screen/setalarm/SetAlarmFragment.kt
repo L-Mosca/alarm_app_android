@@ -8,6 +8,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -19,6 +20,7 @@ import br.com.alarm.app.domain.models.alarm.AlarmItem
 import br.com.alarm.app.domain.models.alarm.Day
 import br.com.alarm.app.domain.models.alarm.WeekDays
 import br.com.alarm.app.domain.models.alarm.getWeekDays
+import br.com.alarm.app.host.HostViewModel
 import br.com.alarm.app.screen.setalarm.confirm_alarm_dialog.ConfirmAlarmDialog
 import br.com.alarm.app.screen.setalarm.weekdays.WeekDaysFragment
 import br.com.alarm.app.util.executeDelayed
@@ -37,6 +39,8 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
     override val bindingInflater: (LayoutInflater) -> FragmentSetAlarmBinding =
         FragmentSetAlarmBinding::inflate
     override val viewModel: SetAlarmViewModel by viewModels()
+
+    private val mainViewModel: HostViewModel by activityViewModels()
 
     private val navArgs: SetAlarmFragmentArgs by navArgs()
     private var dayData: WeekDays? = null
@@ -192,6 +196,7 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
                 showShortToast(toastMessage)
                 val triggerTime = Calendar.getInstance()
                 triggerTime.add(Calendar.SECOND, 10)
+                mainViewModel.scheduleAlarm(it)
                 findNavController().popBackStack()
             }
         }
