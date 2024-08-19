@@ -1,14 +1,12 @@
 package br.com.alarm.app.screen.alarm
 
 import android.view.MenuItem
-import androidx.lifecycle.viewModelScope
 import br.com.alarm.app.R
 import br.com.alarm.app.base.BaseViewModel
 import br.com.alarm.app.base.SingleLiveData
 import br.com.alarm.app.domain.models.alarm.AlarmItem
-import br.com.alarm.app.domain.repositories.AlarmRepositoryContract
+import br.com.alarm.app.domain.repositories.alarm_repository.AlarmRepositoryContract
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,14 +20,14 @@ class AlarmViewModel @Inject constructor(private val alarmRepository: AlarmRepos
     val test = SingleLiveData<AlarmItem>()
 
     fun test() {
-        viewModelScope.launch {
+        defaultLaunch {
             val alarm = alarmRepository.buildDefaultAlarm()
             test.postValue(alarm)
         }
     }
 
     fun fetchAlarms() {
-        viewModelScope.launch {
+        defaultLaunch {
             val list = alarmRepository.fetchAlarmList()
             alarmList.postValue(list)
         }
@@ -52,14 +50,14 @@ class AlarmViewModel @Inject constructor(private val alarmRepository: AlarmRepos
     }
 
     private fun deleteAlarm(alarm: AlarmItem, position: Int) {
-        viewModelScope.launch {
+        defaultLaunch {
             alarmRepository.deleteAlarm(alarm.id!!)
             deleteAlarm.postValue(Pair(position, alarm))
         }
     }
 
     fun changeAlarm(alarm: AlarmItem, position: Int) {
-        viewModelScope.launch {
+        defaultLaunch {
             alarmRepository.updateAlarm(alarm)
             alarmUpdated.postValue(Pair(alarm, position))
         }
