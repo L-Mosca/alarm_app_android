@@ -5,6 +5,8 @@ import br.com.alarm.app.domain.database.AlarmDatabase
 import br.com.alarm.app.domain.database.AlarmDatabaseDAO
 import br.com.alarm.app.domain.repositories.AlarmRepository
 import br.com.alarm.app.domain.repositories.AlarmRepositoryContract
+import br.com.alarm.app.domain.service.media_player.MediaPlayerContract
+import br.com.alarm.app.domain.service.media_player.MediaPlayerService
 import br.com.alarm.app.util.ringtone_helper.RingtoneHelper
 import br.com.alarm.app.util.ringtone_helper.RingtoneHelperContract
 import dagger.Module
@@ -18,6 +20,12 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object Modules {
+
+    @Provides
+    @Singleton
+    fun provideMediaPlayerService(): MediaPlayerContract {
+        return MediaPlayerService()
+    }
 
     @Provides
     fun provideDatabase(@ApplicationContext context: Context): AlarmDatabase {

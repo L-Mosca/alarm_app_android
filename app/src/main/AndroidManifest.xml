@@ -4,7 +4,6 @@
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.USE_EXACT_ALARM"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
@@ -45,7 +44,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".domain.service.NotificationReceiver" />
+        <receiver android:name=".domain.service.receiver.NotificationReceiver" />
 
     </application>
 

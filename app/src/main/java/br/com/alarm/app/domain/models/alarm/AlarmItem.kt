@@ -1,9 +1,7 @@
 package br.com.alarm.app.domain.models.alarm
 
 import android.content.Context
-import android.net.Uri
 import android.os.Parcelable
-import android.util.Log
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -123,10 +121,6 @@ fun WeekDays?.isEquals(weekDays: WeekDays?): Boolean {
     var isEquals = true
 
     list1.forEachIndexed { index, day ->
-        Log.e("test", "day1: ${day.isEnable}")
-        Log.e("test", "day2: ${list2[index].isEnable}")
-        Log.e("test", "-----------------------")
-
         if (day.isEnable != list2[index].isEnable) {
             isEquals = false
         }

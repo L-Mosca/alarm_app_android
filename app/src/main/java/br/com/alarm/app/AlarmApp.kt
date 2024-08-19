@@ -1,7 +1,7 @@
 package br.com.alarm.app
 
 import android.app.Application
-import br.com.alarm.app.domain.service.NotificationService
+import br.com.alarm.app.domain.service.notification.NotificationService
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
