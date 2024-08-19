@@ -5,17 +5,15 @@ import android.media.RingtoneManager
 import android.net.Uri
 import androidx.activity.result.ActivityResult
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import br.com.alarm.app.base.BaseViewModel
 import br.com.alarm.app.base.SingleLiveData
 import br.com.alarm.app.domain.models.alarm.AlarmItem
 import br.com.alarm.app.domain.models.alarm.Day
 import br.com.alarm.app.domain.models.alarm.isEquals
 import br.com.alarm.app.domain.models.alarm.updateAlarmValue
-import br.com.alarm.app.domain.repositories.AlarmRepositoryContract
+import br.com.alarm.app.domain.repositories.alarm_repository.AlarmRepositoryContract
 import br.com.alarm.app.domain.service.notification.NotificationService
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @Suppress("DEPRECATION")
@@ -32,7 +30,7 @@ class SetAlarmViewModel @Inject constructor(private val alarmRepository: AlarmRe
     private var isNewAlarm = true
 
     fun setInitialData(alarmId: Long) {
-        viewModelScope.launch {
+        defaultLaunch {
             if (alarmId == NotificationService.NOTIFICATION_DEFAULT_ID) {
                 val newData = alarmRepository.buildDefaultAlarm()
                 alarmItem.postValue(newData)
@@ -51,14 +49,14 @@ class SetAlarmViewModel @Inject constructor(private val alarmRepository: AlarmRe
     }
 
     fun saveClicked() {
-        viewModelScope.launch {
+        defaultLaunch {
             alarmRepository.createAlarm(alarmItem.value!!)
             saveSuccess.postValue(alarmItem.value)
         }
     }
 
     fun selectRingtone() {
-        viewModelScope.launch {
+        defaultLaunch {
             fetchRingtone.postValue(alarmRepository.buildRingtoneIntent(alarmItem.value?.ringtone))
         }
     }
@@ -81,7 +79,7 @@ class SetAlarmViewModel @Inject constructor(private val alarmRepository: AlarmRe
     }
 
     fun deleteAlarm() {
-        viewModelScope.launch {
+        defaultLaunch {
             alarmItem.value?.id?.let { alarmRepository.deleteAlarm(it) }
             deleteSuccess.postValue(Unit)
         }

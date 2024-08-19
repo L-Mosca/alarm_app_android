@@ -31,6 +31,7 @@ class WeekDaysFragment : BaseFragment<FragmentWeekDaysBinding>() {
     override val bindingInflater: (LayoutInflater) -> FragmentWeekDaysBinding =
         FragmentWeekDaysBinding::inflate
     override val viewModel: WeekDaysViewModel by viewModels()
+    override val screenName = "Week Days"
 
     private val adapter = WeekDaysAdapter()
 
@@ -47,14 +48,11 @@ class WeekDaysFragment : BaseFragment<FragmentWeekDaysBinding>() {
         }
     }
 
-
     private fun setupAdapter() {
         arguments?.getParcelable<WeekDays>(WEEK_DAYS_ARGUMENT)?.let {
             adapter.dataList = it.days
             binding.rvWeekDays.adapter = adapter
         }
-
         adapter.onItemClicked = { }
     }
-
 }
