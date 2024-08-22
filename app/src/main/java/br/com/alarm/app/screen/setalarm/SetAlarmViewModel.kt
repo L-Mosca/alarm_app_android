@@ -8,7 +8,6 @@ import androidx.lifecycle.MutableLiveData
 import br.com.alarm.app.base.BaseViewModel
 import br.com.alarm.app.base.SingleLiveData
 import br.com.alarm.app.domain.models.alarm.AlarmItem
-import br.com.alarm.app.domain.models.alarm.Day
 import br.com.alarm.app.domain.models.alarm.isEquals
 import br.com.alarm.app.domain.models.alarm.updateAlarmValue
 import br.com.alarm.app.domain.repositories.alarm_repository.AlarmRepositoryContract
@@ -44,9 +43,9 @@ class SetAlarmViewModel @Inject constructor(private val alarmRepository: AlarmRe
         }
     }
 
-    fun setSelectedDays(dayList: List<Day>) {
+    /*fun setSelectedDays(dayList: List<Day>) {
         alarmItem.postValue(alarmItem.value?.updateAlarmValue(dayList))
-    }
+    }*/
 
     fun saveClicked() {
         defaultLaunch {

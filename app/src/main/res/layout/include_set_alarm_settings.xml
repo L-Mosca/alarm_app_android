@@ -26,9 +26,9 @@
             android:id="@+id/includeAlarmSound"
             layout="@layout/include_alarm_sound" />
 
-        <include
+        <!--<include
             android:id="@+id/includeWeekDays"
-            layout="@layout/include_week_days" />
+            layout="@layout/include_week_days" />-->
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 </com.google.android.material.card.MaterialCardView>

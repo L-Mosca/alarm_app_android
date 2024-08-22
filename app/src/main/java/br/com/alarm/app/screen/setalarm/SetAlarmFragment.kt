@@ -3,13 +3,11 @@ package br.com.alarm.app.screen.setalarm
 import android.content.Intent
 import android.text.format.DateFormat
 import android.view.LayoutInflater
-import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -17,18 +15,13 @@ import br.com.alarm.app.R
 import br.com.alarm.app.base.BaseFragment
 import br.com.alarm.app.databinding.FragmentSetAlarmBinding
 import br.com.alarm.app.domain.models.alarm.AlarmItem
-import br.com.alarm.app.domain.models.alarm.Day
 import br.com.alarm.app.domain.models.alarm.WeekDays
-import br.com.alarm.app.domain.models.alarm.getWeekDays
 import br.com.alarm.app.host.HostViewModel
 import br.com.alarm.app.screen.setalarm.confirm_alarm_dialog.ConfirmAlarmDialog
-import br.com.alarm.app.screen.setalarm.weekdays.WeekDaysFragment
-import br.com.alarm.app.util.executeDelayed
 import br.com.alarm.app.util.extractHoursAndMinutesFromTimestamp
 import br.com.alarm.app.util.getDifferenceTime
 import br.com.alarm.app.util.getHourIn24Format
 import br.com.alarm.app.util.getRingToneTitle
-import br.com.alarm.app.util.hideKeyboard
 import com.google.android.material.switchmaterial.SwitchMaterial
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
@@ -142,7 +135,7 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
             includeAlarmSound.clSelectSound.setOnClickListener { viewModel.selectRingtone() }
 
             // Setup Week days
-            includeWeekDays.vWeekDays.setOnClickListener {
+            /*includeWeekDays.vWeekDays.setOnClickListener {
                 val fragment = WeekDaysFragment.newInstance(dayData!!)
 
                 fragment.listener = object : WeekDaysFragment.Listener {
@@ -164,7 +157,7 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
                     replace(binding.flWeekDays.id, fragment)
                     runOnCommit { runCircularRevealAnimation(true) }
                 }
-            }
+            }*/
         }
     }
 
@@ -233,11 +226,11 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
             // Update week days
             dayData = alarmItem.weekDays
 
-            includeWeekDays.tvWeekDaysSelected.text = dayData.getWeekDays(requireContext())
+            //includeWeekDays.tvWeekDaysSelected.text = dayData.getWeekDays(requireContext())
         }
     }
 
-    private fun runCircularRevealAnimation(isOpening: Boolean) {
+    /*private fun runCircularRevealAnimation(isOpening: Boolean) {
         hideKeyboard()
         val anim = if (isOpening) binding.flWeekDays.animate().alpha(1f).setDuration(300L)
         else binding.flWeekDays.animate().alpha(0f).setDuration(300L)
@@ -248,7 +241,7 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>() {
         } else anim.withEndAction { binding.flWeekDays.visibility = View.INVISIBLE }
 
         anim.start()
-    }
+    }*/
 
     private fun changeSwitchAppearance(isEnable: Boolean, switch: SwitchMaterial) {
         switch.trackTintList = ContextCompat.getColorStateList(
