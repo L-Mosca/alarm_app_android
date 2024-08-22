@@ -17,14 +17,6 @@ class AlarmViewModel @Inject constructor(private val alarmRepository: AlarmRepos
     val deleteAlarm = SingleLiveData<Pair<Int, AlarmItem>>()
     val alarmList = SingleLiveData<List<AlarmItem>>()
     val alarmUpdated = SingleLiveData<Pair<AlarmItem, Int>>()
-    val test = SingleLiveData<AlarmItem>()
-
-    fun test() {
-        defaultLaunch {
-            val alarm = alarmRepository.buildDefaultAlarm()
-            test.postValue(alarm)
-        }
-    }
 
     fun fetchAlarms() {
         defaultLaunch {

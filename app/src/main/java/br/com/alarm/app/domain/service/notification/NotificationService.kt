@@ -120,10 +120,9 @@ class NotificationService @Inject constructor(private val context: Context) {
             PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
+
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val time = alarm.date
-        //val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-        //val formattedDate = dateFormat.format(time)
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
             time,

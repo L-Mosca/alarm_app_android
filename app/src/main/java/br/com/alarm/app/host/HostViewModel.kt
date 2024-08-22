@@ -13,16 +13,15 @@ import javax.inject.Inject
 class HostViewModel @Inject constructor(private val mediaPlayer: MediaPlayerContract) :
     ViewModel() {
 
-    val createNotification = SingleLiveData<AlarmItem>()
+    val cancelAlarm = SingleLiveData<AlarmItem>()
     val scheduleAlarm = SingleLiveData<AlarmItem>()
-
-
-    fun createNotification(alarm: AlarmItem) {
-        createNotification.postValue(alarm)
-    }
 
     fun scheduleAlarm(alarm: AlarmItem) {
         scheduleAlarm.postValue(alarm)
+    }
+
+    fun cancelAlarm(alarm: AlarmItem) {
+        cancelAlarm.postValue(alarm)
     }
 
     private fun stopPlayer() {
