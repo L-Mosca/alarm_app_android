@@ -2,12 +2,14 @@ package br.com.alarm.app.screen.alarm
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import br.com.alarm.app.R
 import br.com.alarm.app.base.BaseFragment
 import br.com.alarm.app.databinding.FragmentAlarmBinding
 import br.com.alarm.app.domain.models.alarm.AlarmItem
 import br.com.alarm.app.domain.service.notification.NotificationService
+import br.com.alarm.app.host.HostViewModel
 import br.com.alarm.app.screen.alarm.adapter.AlarmAdapter
 import br.com.alarm.app.util.navigate
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,6 +23,7 @@ class AlarmFragment : BaseFragment<FragmentAlarmBinding>() {
     override val viewModel: AlarmViewModel by viewModels()
     override val screenName = "Alarm Screen"
 
+    private val mainViewModel: HostViewModel by activityViewModels()
     private val adapter = AlarmAdapter()
 
     override fun initViews() {
@@ -45,7 +48,12 @@ class AlarmFragment : BaseFragment<FragmentAlarmBinding>() {
     private fun setupAdapter(list: List<AlarmItem>) {
         adapter.dataList = list
 
-        adapter.onSwitchSelected = { alarm, position -> viewModel.changeAlarm(alarm, position) }
+        adapter.onSwitchSelected = { alarm, position ->
+            if (alarm.isEnable) mainViewModel.scheduleAlarm(alarm)
+            else mainViewModel.cancelAlarm(alarm)
+
+            viewModel.changeAlarm(alarm, position)
+        }
         adapter.onOptionsSelected = { view, position, alarm ->
             showPopMenu(R.menu.alarm_pop_menu, view) {
                 viewModel.handlePopMenuClick(it, position, alarm)

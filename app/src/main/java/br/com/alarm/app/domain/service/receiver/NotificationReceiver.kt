@@ -11,6 +11,7 @@ import br.com.alarm.app.domain.service.media_player.MediaPlayerContract
 import br.com.alarm.app.domain.service.notification.NotificationService
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Calendar
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -29,6 +30,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 NotificationService.NOTIFICATION_ACTION_PLAY -> {
                     showNotification()
                     mediaPlayer.init(context, getRingtoneUri(it, context))
+                    buildNewAlarm(it)
                 }
 
                 NotificationService.NOTIFICATION_ACTION_STOP -> {
@@ -53,5 +55,20 @@ class NotificationReceiver : BroadcastReceiver() {
         }
 
         return RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_ALARM)
+    }
+
+    private fun buildNewAlarm(intent: Intent) {
+        intent.getStringExtra(NotificationService.NOTIFICATION_EXTRA)?.let { stringData ->
+            val alarm = Gson().fromJson(stringData, AlarmItem::class.java)
+
+            val calendar = Calendar.getInstance().apply {
+                timeInMillis = System.currentTimeMillis()
+                add(Calendar.DAY_OF_YEAR, 1)
+            }
+            val timeForNextAlarm = calendar.timeInMillis
+            alarm.date = timeForNextAlarm
+
+            notificationService?.scheduleAlarm(alarm)
+        }
     }
 }
