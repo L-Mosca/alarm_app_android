@@ -11,9 +11,9 @@ import br.com.alarm.app.base.BaseAdapter
 import br.com.alarm.app.base.ViewHolder
 import br.com.alarm.app.databinding.AdapterAlarmItemBinding
 import br.com.alarm.app.domain.models.alarm.AlarmItem
-import br.com.alarm.app.domain.models.alarm.getWeekDays
 import br.com.alarm.app.util.get12HourFormatTag
 import br.com.alarm.app.util.getDate
+import br.com.alarm.app.util.getRingToneTitle
 
 class AlarmAdapter : BaseAdapter<AdapterAlarmItemBinding, AlarmItem>() {
     override val bindingInflater: (LayoutInflater, ViewGroup) -> AdapterAlarmItemBinding
@@ -56,7 +56,8 @@ class AlarmAdapter : BaseAdapter<AdapterAlarmItemBinding, AlarmItem>() {
 
             swAlarm.isChecked = data.isEnable
 
-            tvWeekDays.text = data.weekDays.getWeekDays(root.context)
+            //tvWeekDays.text = data.weekDays.getWeekDays(root.context)
+            tvWeekDays.text = data.ringtone.getRingToneTitle(root.context)
 
             vShadow.isVisible = !data.isEnable
             val color = if (data.isEnable) R.color.pink_500 else R.color.blue_600
